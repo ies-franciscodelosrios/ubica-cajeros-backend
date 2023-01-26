@@ -2,6 +2,7 @@ package bancaMach.backend.api_cashier_models;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
