@@ -34,10 +34,10 @@ public class DTOTransaction implements Serializable {
     @Column(name = "amount")
     private Double amount;
 
-    @Column(name = "type")
+    @Column(name = "type", length = 20)
     private String type;
 
-    @Column(name = "entity")
+    @Column(name = "entity", length = 50)
     private String entity;
 
     public DTOTransaction(Long id, DTOClient client, DTOCashier cashier, Byte[] qr, LocalDateTime init_date,
