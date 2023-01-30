@@ -3,6 +3,7 @@ package bancaMach.backend.api_cashier_services;
 import bancaMach.backend.api_cahier_repositories.CashierRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTOCashier;
+import bancaMach.backend.api_cashier_models.DTORequestGeoCashier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +48,15 @@ public class CashierService {
         }else{
             throw new RecordNotFoundException("No cashier record exist for given id", id);
         }
+    }
+
+    public List<DTOCashier> getAllCashiersByLoc(DTORequestGeoCashier georeq){
+        //middleware
+        return cashierRepository.getAllCashiersByLoc(georeq);
+    }
+
+    public List<DTOCashier> getAllCashiersByCP(Integer cp){
+        //middleware
+        return cashierRepository.getAllCashiersByCP(cp);
     }
 }

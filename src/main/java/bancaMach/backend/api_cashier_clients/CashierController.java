@@ -2,6 +2,7 @@ package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTOCashier;
+import bancaMach.backend.api_cashier_models.DTORequestGeoCashier;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class CashierController {
         this.cashierService = cashierService;
     }
 
-    @PostMapping("/newCashier")
+    @PostMapping("/cashiers")
     public ResponseEntity<DTOCashier> createCashier(@RequestBody DTOCashier cashier){
         DTOCashier created = cashierService.createOrUpdateCashier(cashier);
         return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
@@ -54,5 +55,21 @@ public class CashierController {
     public HttpStatus deleteCashierById(@PathVariable("id") Long id) throws RecordNotFoundException {
         cashierService.deleteCashierById(id);
         return HttpStatus.ACCEPTED;
+    }
+
+    /**
+     * GEOLOC ENDPOINTS
+     */
+
+    @GetMapping("/geocashiers")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq){
+        List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq);
+        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/geocashiers/{cp}")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq, @PathVariable("cp") Integer cp){
+        List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
+        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 }
