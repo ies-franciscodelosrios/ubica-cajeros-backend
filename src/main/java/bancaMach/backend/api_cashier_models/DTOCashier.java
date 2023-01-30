@@ -19,13 +19,13 @@ public class DTOCashier implements Serializable {
     @Column(name="photo")
     private Byte[] photo;
 
-    @Column(name="address")
+    @Column(name="address", length = 100)
     private String address;
 
-    @Column(name="location")
+    @Column(name="location", length = 50)
     private String location;
 
-    @Column(name="cp")
+    @Column(name="cp", length = 5)
     private Integer cp;
 
     @Column(name="lattitude")
