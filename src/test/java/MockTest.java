@@ -1,2 +1,3 @@
-public class MockTest {
+public class
+  MockTest {
 }

@@ -17,6 +17,7 @@ public class ClientService {
 
     /**
      * Method that creates or updates a client
+     * @param c
      */
     public DTOClient createOrUpdateClient(DTOClient c) {
         if (c.getId() != null) {
