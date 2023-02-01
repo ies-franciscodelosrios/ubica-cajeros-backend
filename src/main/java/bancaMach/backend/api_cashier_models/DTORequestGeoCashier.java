@@ -12,7 +12,6 @@ public class DTORequestGeoCashier implements Serializable {
     }
 
     public DTORequestGeoCashier(Long user, Double lat, Double lng) {
-
         this.user = user;
         this.lat = lat;
         this.lng = lng;

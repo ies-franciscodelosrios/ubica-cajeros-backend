@@ -2,6 +2,7 @@ package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTOClient;
+import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +21,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class ClientController {
 
-    ClientService clientService;
+    private ClientService clientService;
 
     @Autowired
     public ClientController(ClientService clientService){

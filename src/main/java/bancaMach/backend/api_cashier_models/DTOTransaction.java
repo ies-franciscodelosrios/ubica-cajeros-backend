@@ -1,5 +1,7 @@
 package bancaMach.backend.api_cashier_models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,45 +14,45 @@ public class DTOTransaction implements Serializable {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "client_id")
     private DTOClient client;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cashier_id")
     private DTOCashier cashier;
 
-    @Column(name = "qr")
-    private Byte[] qr;
+    @Column(name = "security_code")
+    private String secutityCode;
 
-    @Column(name = "init_date")
+    @Column(name = "init_timedate")
     private LocalDateTime init_date;
 
-    @Column(name = "end_date")
+    @Column(name = "end_timedate")
     private LocalDateTime end_date;
 
     @Column(name = "amount")
     private Double amount;
 
-    @Column(name = "type", length = 20)
-    private String type;
+    @Column(name = "type")
+    private Boolean type;
 
-    @Column(name = "entity", length = 50)
-    private String entity;
 
-    public DTOTransaction(Long id, DTOClient client, DTOCashier cashier, Byte[] qr, LocalDateTime init_date,
-                          LocalDateTime end_date, Double amount, String type, String entity) {
+    public DTOTransaction(Long id, DTOClient client, DTOCashier cashier, String  secutityCode, LocalDateTime init_date,
+                          LocalDateTime end_date, Double amount, Boolean type) {
         this.id = id;
         this.client = client;
         this.cashier = cashier;
-        this.qr = qr;
+        this.secutityCode = secutityCode;
         this.init_date = init_date;
         this.end_date = end_date;
         this.amount = amount;
         this.type = type;
-        this.entity = entity;
     }
 
     public DTOTransaction() {}
@@ -79,12 +81,12 @@ public class DTOTransaction implements Serializable {
         this.cashier = cashier;
     }
 
-    public Byte[] getQr() {
-        return qr;
+    public String getSecutityCode() {
+        return secutityCode;
     }
 
-    public void setQr(Byte[] qr) {
-        this.qr = qr;
+    public void setSecutityCode(String secutityCode) {
+        this.secutityCode = secutityCode;
     }
 
     public LocalDateTime getInit_date() {
@@ -111,19 +113,11 @@ public class DTOTransaction implements Serializable {
         this.amount = amount;
     }
 
-    public String getType() {
+    public Boolean getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Boolean type) {
         this.type = type;
-    }
-
-    public String getEntity() {
-        return entity;
-    }
-
-    public void setEntity(String entity) {
-        this.entity = entity;
     }
 }

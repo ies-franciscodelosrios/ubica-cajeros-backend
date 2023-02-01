@@ -1,5 +1,8 @@
 package bancaMach.backend.api_cashier_models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.locationtech.jts.geom.Point;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -17,20 +20,25 @@ public class DTOCashier implements Serializable {
     private Long id;
 
     @Column(name="photo")
-    private Byte[] photo;
+    private String photo;
 
     @Column(name="address", length = 100)
     private String address;
 
-    @Column(name="location", length = 50)
-    private String location;
+    @Column(name="locality", length = 50)
+    private String locality;
 
     @Column(name="cp", length = 5)
-    private Integer cp;
+    private String cp;
 
+    @Column(name="position")
+    private Point position;
+
+    @Transient
     @Column(name="lattitude")
     private Double lattitude;
 
+    @Transient
     @Column(name="longitude")
     private Double longitude;
 
@@ -40,18 +48,22 @@ public class DTOCashier implements Serializable {
     @Column(name="available")
     private Boolean available;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cashier")
     private List<DTOTransaction> transactions;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "cashier")
     List<DTOIncidence> incidences;
 
-    public DTOCashier(Long id, Byte[] photo, String address, String location, Integer cp, Double lattitude, Double longitude,
+    public DTOCashier(Long id, String photo, String address, String locality, String cp, Point position, Double lattitude, Double longitude,
                       Double balance, Boolean available, List<DTOTransaction> transactions, List<DTOIncidence> incidences) {
         this.id = id;
         this.photo = photo;
         this.address = address;
-        this.location = location;
+        this.locality = locality;
         this.cp = cp;
+        this.position = position;
         this.lattitude = lattitude;
         this.longitude = longitude;
         this.balance = balance;
@@ -70,11 +82,11 @@ public class DTOCashier implements Serializable {
         this.id = id;
     }
 
-    public Byte[] getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Byte[] photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
@@ -86,20 +98,28 @@ public class DTOCashier implements Serializable {
         this.address = address;
     }
 
-    public String getLocation() {
-        return location;
+    public String getLocality() {
+        return locality;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocality(String location) {
+        this.locality = location;
     }
 
-    public Integer getCp() {
+    public String getCp() {
         return cp;
     }
 
-    public void setCp(Integer cp) {
+    public void setCp(String cp) {
         this.cp = cp;
+    }
+
+    public Point getPosition() {
+        return position;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
     }
 
     public Double getLattitude() {

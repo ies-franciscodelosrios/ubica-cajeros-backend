@@ -17,8 +17,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class CashierController {
 
-    CashierService cashierService;
-    ClientService clientService;
+    private CashierService cashierService;
+    private ClientService clientService;
 
     @Autowired
     public CashierController(CashierService cashierService, ClientService clientService) {
@@ -63,13 +63,19 @@ public class CashierController {
 
     @GetMapping("/geocashiers")
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq){
-        List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq);
+        List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/geocashiers/{cp}")
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq, @PathVariable("cp") Integer cp){
         List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
+        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/geocashiers/{distance}")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(@RequestBody DTORequestGeoCashier georeq, @PathVariable("distance") Integer distance){
+        List<DTOCashier> result = cashierService.getAllCashiersByDistance(georeq.getLat(), georeq.getLng(), distance);
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 }
