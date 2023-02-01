@@ -1,5 +1,7 @@
 package bancaMach.backend.api_cashier_models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -11,12 +13,15 @@ public class DTOIncidence implements Serializable {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "client_id")
     private DTOClient client;
 
+    @JsonBackReference
     @ManyToOne()
     @JoinColumn(name = "cashier_id")
     private DTOCashier cashier;
