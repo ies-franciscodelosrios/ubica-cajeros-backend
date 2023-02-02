@@ -61,8 +61,8 @@ public class CashierService {
         return cashierRepository.getAllCashiersByCP(cp);
     }
 
-    public List<DTOCashier> getAllCashiersByDistance(Double lat, Double lng, Integer distance){
+    public List<DTOCashier> getAllCashiersByDistance(Double lat, Double lng, Integer distanceM){
         //middleware
-        return cashierRepository.getAllCashiersByDistance(lat, lng, distance);
+        return cashierRepository.getAllCashiersByDistance(lat,lng, distanceM);
     }
 }

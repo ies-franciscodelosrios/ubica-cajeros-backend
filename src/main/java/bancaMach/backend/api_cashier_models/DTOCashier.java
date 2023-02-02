@@ -2,7 +2,6 @@ package bancaMach.backend.api_cashier_models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.locationtech.jts.geom.Point;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -31,7 +30,7 @@ public class DTOCashier implements Serializable {
     @Column(name="cp", length = 5)
     private String cp;
 
-    @Column(name="position")
+    @Column(name = "position")
     private Point position;
 
     @Transient

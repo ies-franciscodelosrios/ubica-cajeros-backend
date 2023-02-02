@@ -61,9 +61,11 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
-    @GetMapping("/geocashiers")
-    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq){
-        List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
+    @GetMapping("/geocashiers/{lat}/{lng}")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(
+            @PathVariable Double lat,
+            @PathVariable Double lng) {
+        List<DTOCashier> result = cashierService.getAllCashiersByLoc(lat, lng);
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -73,9 +75,12 @@ public class CashierController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/{distance}")
-    public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(@RequestBody DTORequestGeoCashier georeq, @PathVariable("distance") Integer distance){
-        List<DTOCashier> result = cashierService.getAllCashiersByDistance(georeq.getLat(), georeq.getLng(), distance);
+    @GetMapping("/geocashiers/{lat}/{lng}/{distanceM}")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(
+            @PathVariable Double lat,
+            @PathVariable Double lng,
+            @PathVariable Integer distanceM){
+        List<DTOCashier> result = cashierService.getAllCashiersByDistance(lat, lng, distanceM);
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 }
