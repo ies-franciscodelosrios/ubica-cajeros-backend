@@ -1,7 +1,6 @@
 package bancaMach.backend.api_cashier_models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
