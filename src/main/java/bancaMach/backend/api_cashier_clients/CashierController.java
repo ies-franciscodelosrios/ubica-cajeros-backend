@@ -16,10 +16,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
+//@CrossOrigin(origins="url")
 @RestController
 @RequestMapping("/api")
 public class CashierController {
@@ -101,6 +101,22 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
+    @GetMapping("/geocashiers")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq) {
+        List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
+        setCoordenates(result);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/geocashiers/{distanceM}")
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(
+            @RequestBody DTORequestGeoCashier georeq,
+            @PathVariable Integer distanceM){
+        List<DTOCashier> result = cashierService.getAllCashiersByDistance(georeq.getLat(), georeq.getLng(), distanceM);
+        setCoordenates(result);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
     @GetMapping("/geocashiers/{lat}/{lng}")
     @Operation(summary = "Shows a cashier by his location in 500 meters range with the user")
     @ApiResponses(value = {
@@ -113,7 +129,7 @@ public class CashierController {
             @PathVariable Double lng) {
         List<DTOCashier> result = cashierService.getAllCashiersByLoc(lat, lng);
         setCoordenates(result);
-        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/geocashiers/{cp}")
@@ -126,7 +142,7 @@ public class CashierController {
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq, @PathVariable("cp") Integer cp){
         List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
         setCoordenates(result);
-        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/geocashiers/{lat}/{lng}/{distanceM}")
@@ -142,7 +158,7 @@ public class CashierController {
             @PathVariable Integer distanceM){
         List<DTOCashier> result = cashierService.getAllCashiersByDistance(lat, lng, distanceM);
         setCoordenates(result);
-        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
     private void setCoordenates(List<DTOCashier> cashiers) {
