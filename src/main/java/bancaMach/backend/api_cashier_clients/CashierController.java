@@ -33,7 +33,7 @@ public class CashierController {
         this.cashierService = cashierService;
     }
 
-    @PostMapping("/cashiers")
+    @PostMapping("/cashier")
     @Operation(summary = "Creates a cashier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
@@ -57,7 +57,7 @@ public class CashierController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/cashiers/{id}")
+    @GetMapping("/cashier/{id}")
     @Operation(summary = "Shows a cashier by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
