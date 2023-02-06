@@ -29,11 +29,11 @@ public class ClientController {
     }
 
     @GetMapping("/client")
-    @Operation(summary = "Muestra todos los clientes")
+    @Operation(summary = "Shows all the clients")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Clientes encontrados", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
-            @ApiResponse(responseCode = "400", description = "Clientes no válidos", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Clientes no encontrados", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Clients found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
+            @ApiResponse(responseCode = "400", description = "Clients not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Clients not found", content = @Content)
     })
     public ResponseEntity<List<DTOClient>> getAllClients(){
         List<DTOClient> result = clientService.getAllClients();
@@ -41,11 +41,11 @@ public class ClientController {
     }
 
     @GetMapping("/client/{id}")
-    @Operation(summary = "Muestra un cliente dada su id")
+    @Operation(summary = "Shows a client by his id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cliente encontrado", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
-            @ApiResponse(responseCode = "400", description = "Cliente no válido", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Client found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
     })
     public ResponseEntity<DTOClient> getClientById(@PathVariable("id") Long id) throws RecordNotFoundException{
         DTOClient client = clientService.getClientById(id);
@@ -53,12 +53,23 @@ public class ClientController {
     }
 
     @PostMapping("/client")
+    @Operation(summary = "Creates a client")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not created", content = @Content),
+    })
     public ResponseEntity<DTOClient> createClient(@RequestBody DTOClient client) throws RecordNotFoundException{
         DTOClient clientCreated = clientService.createOrUpdateClient(client);
         return new ResponseEntity<>(clientCreated, new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping("/client/{id}")
+    @Operation(summary = "Edits the client information by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not edited", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
+    })
     public ResponseEntity<DTOClient> updateClient(@RequestBody DTOClient client, @PathVariable("id") Long id) throws RecordNotFoundException{
         client.setId(id);
         client = clientService.createOrUpdateClient(client);
@@ -66,6 +77,12 @@ public class ClientController {
     }
 
     @DeleteMapping("/client/{id}")
+    @Operation(summary = "Deletes a client by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client deleted", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOClient.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not deleted", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
+    })
     public HttpStatus deleteClient(@PathVariable("id") Long id) throws RecordNotFoundException{
         clientService.deleteClient(id);
         return HttpStatus.ACCEPTED;

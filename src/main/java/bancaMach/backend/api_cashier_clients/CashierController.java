@@ -2,9 +2,15 @@ package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTOCashier;
+import bancaMach.backend.api_cashier_models.DTOClient;
 import bancaMach.backend.api_cashier_models.DTORequestGeoCashier;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,24 +33,47 @@ public class CashierController {
     }
 
     @PostMapping("/cashiers")
+    @Operation(summary = "Creates a cashier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not created", content = @Content),
+    })
     public ResponseEntity<DTOCashier> createCashier(@RequestBody DTOCashier cashier){
         DTOCashier created = cashierService.createOrUpdateCashier(cashier);
         return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
     }
 
     @GetMapping("/cashiers")
+    @Operation(summary = "Shows all the cashiers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashiers found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashiers not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashiers not found", content = @Content)
+    })
     public ResponseEntity<List<DTOCashier>> getAllCashiers(){
         List<DTOCashier> result = cashierService.getAllCashiers();
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/cashiers/{id}")
+    @Operation(summary = "Shows a cashier by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Is not found", content = @Content)
+    })
     public ResponseEntity<DTOCashier> getCashiertById(@PathVariable Long id){
         DTOCashier cashier = cashierService.getCashierById(id);
         return new ResponseEntity<>(cashier,new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping("/cashier/{id}")
+    @Operation(summary = "Edits the cashier information by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not edited", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Id not found", content = @Content)
+    })
     public ResponseEntity<DTOCashier> UpdateContact(@RequestBody DTOCashier cashier, Long id,@PathVariable(value = "id") Long cashierId){
         cashier.setId(id);
         DTOCashier update = cashierService.createOrUpdateCashier(cashier);
@@ -52,6 +81,12 @@ public class CashierController {
     }
 
     @DeleteMapping("/cashier/{id}")
+    @Operation(summary = "Deletes a cashier by his id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier deleted", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not deleted", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Id not found", content = @Content)
+    })
     public HttpStatus deleteCashierById(@PathVariable("id") Long id) throws RecordNotFoundException {
         cashierService.deleteCashierById(id);
         return HttpStatus.ACCEPTED;
@@ -62,6 +97,12 @@ public class CashierController {
      */
 
     @GetMapping("/geocashiers/{lat}/{lng}")
+    @Operation(summary = "Shows a cashier by his location in 500 meters range with the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's location not found", content = @Content)
+    })
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(
             @PathVariable Double lat,
             @PathVariable Double lng) {
@@ -70,12 +111,24 @@ public class CashierController {
     }
 
     @GetMapping("/geocashiers/{cp}")
+    @Operation(summary = "Shows a cashier by his postcode near the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq, @PathVariable("cp") Integer cp){
         List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/geocashiers/{lat}/{lng}/{distanceM}")
+    @Operation(summary = "Shows all the cashier by his distance between it and the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashiers found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashiers not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
     public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(
             @PathVariable Double lat,
             @PathVariable Double lng,
