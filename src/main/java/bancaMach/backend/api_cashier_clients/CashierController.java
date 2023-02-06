@@ -27,7 +27,7 @@ public class CashierController {
         this.cashierService = cashierService;
     }
 
-    @PostMapping("/cashiers")
+    @PostMapping("/cashier")
     public ResponseEntity<DTOCashier> createCashier(@RequestBody DTOCashier cashier){
         DTOCashier created = cashierService.createOrUpdateCashier(cashier);
         return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
@@ -40,7 +40,7 @@ public class CashierController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/cashiers/{id}")
+    @GetMapping("/cashier/{id}")
     public ResponseEntity<DTOCashier> getCashiertById(@PathVariable Long id){
         DTOCashier cashier = cashierService.getCashierById(id);
         List<DTOCashier> aux = new ArrayList<>();

@@ -13,9 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 //@CrossOrigin(origins="url")
 @RestController
@@ -44,6 +45,7 @@ public class TransactionController {
         created.setInit_date(LocalDateTime.now());
         created.setEnd_date(LocalDateTime.now().plusHours(12));
         created.setType(transaction.getType());
+        created.setAmount(transaction.getAmount());
         if(transaction.getType()){
             cashier.setBalance(cashier.getBalance()+transaction.getAmount()); //enter amount
         }
@@ -60,5 +62,19 @@ public class TransactionController {
         }
         created = transactionService.createOrUpdateTransaction(created);
         return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<List<DTOTransaction>> getAllTransactions(){
+        List<DTOTransaction> result = transactionService.getAllTransactions();
+        return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/transaction/{id}")
+    public ResponseEntity<DTOTransaction> getTransactionById(@PathVariable Long id) throws IOException {
+        DTOTransaction transaction = transactionService.getTransantionById(id);
+        List<DTOTransaction> aux = new ArrayList<>();
+        aux.add(transaction);
+        return new ResponseEntity<>(transaction,new HttpHeaders(), HttpStatus.OK);
     }
 }
