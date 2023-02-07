@@ -101,14 +101,14 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
-    @GetMapping("/geocashiers")
+    @GetMapping("/cashiers/distanceDefault")
     public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq) {
         List<DTOCashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/distance/{distanceM}")
+    @GetMapping("/cashiers/distance/{distanceM}")
     public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(
             @RequestBody DTORequestGeoCashier georeq,
             @PathVariable Integer distanceM){
@@ -117,7 +117,20 @@ public class CashierController {
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/{lat}/{lng}")
+    @GetMapping("/cashiers/cp/{cp}")
+    @Operation(summary = "Shows a cashier by his postcode near the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@PathVariable("cp") String cp){
+        List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
+        setCoordenates(result);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/cashiers/{lat}/{lng}")
     @Operation(summary = "Shows a cashier by his location in 500 meters range with the user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
@@ -132,20 +145,7 @@ public class CashierController {
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/cp/{cp}")
-    @Operation(summary = "Shows a cashier by his postcode near the user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
-            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
-    })
-    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@PathVariable("cp") String cp){
-        List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
-        setCoordenates(result);
-        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
-    }
-
-    @GetMapping("/geocashiers/{lat}/{lng}/{distanceM}")
+    @GetMapping("/cashiers/{lat}/{lng}/{distanceM}")
     @Operation(summary = "Shows all the cashier by his distance between it and the user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashiers found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
