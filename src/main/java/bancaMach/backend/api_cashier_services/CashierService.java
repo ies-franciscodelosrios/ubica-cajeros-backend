@@ -56,7 +56,7 @@ public class CashierService {
         return cashierRepository.getAllCashiersByLoc(lat, lng);
     }
 
-    public List<DTOCashier> getAllCashiersByCP(Integer cp){
+    public List<DTOCashier> getAllCashiersByCP(String cp){
         //middleware
         return cashierRepository.getAllCashiersByCP(cp);
     }

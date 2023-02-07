@@ -79,7 +79,7 @@ public class CashierController {
             @ApiResponse(responseCode = "400", description = "Cashier not edited", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Id not found", content = @Content)
     })
-    public ResponseEntity<DTOCashier> UpdateContact(@RequestBody DTOCashier cashier, Long id,@PathVariable(value = "id") Long cashierId){
+    public ResponseEntity<DTOCashier> UpdateCashier(@RequestBody DTOCashier cashier, @PathVariable(value = "id") Long id){
         cashier.setId(id);
         DTOCashier update = cashierService.createOrUpdateCashier(cashier);
         return new ResponseEntity<>(update, new HttpHeaders(), HttpStatus.OK);
@@ -108,7 +108,7 @@ public class CashierController {
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/{distanceM}")
+    @GetMapping("/geocashiers/distance/{distanceM}")
     public ResponseEntity<List<DTOCashier>> getAllCashiersByDistance(
             @RequestBody DTORequestGeoCashier georeq,
             @PathVariable Integer distanceM){
@@ -132,14 +132,14 @@ public class CashierController {
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/geocashiers/{cp}")
+    @GetMapping("/geocashiers/cp/{cp}")
     @Operation(summary = "Shows a cashier by his postcode near the user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = DTOCashier.class))}),
             @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
     })
-    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@RequestBody DTORequestGeoCashier georeq, @PathVariable("cp") Integer cp){
+    public ResponseEntity<List<DTOCashier>> getAllCashiersByLoc(@PathVariable("cp") String cp){
         List<DTOCashier> result = cashierService.getAllCashiersByCP(cp);
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
