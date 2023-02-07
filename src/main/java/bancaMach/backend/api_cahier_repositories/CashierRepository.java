@@ -13,7 +13,7 @@ public interface CashierRepository extends JpaRepository<DTOCashier, Long> {
     @Query(
             value = "SELECT * " +
                     "FROM cashier " +
-                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 500);",
+                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 1000);",
 
             nativeQuery = true)
     List<DTOCashier> getAllCashiersByLoc(@Param(value="lat")Double lat,@Param(value="lng")Double lng);
@@ -21,9 +21,9 @@ public interface CashierRepository extends JpaRepository<DTOCashier, Long> {
     @Query(
             value = "SELECT * " +
                     "FROM cashier " +
-                    "WHERE cp = :cp;",
+                    "WHERE cp like :cp ;",
             nativeQuery = true)
-    List<DTOCashier> getAllCashiersByCP(Integer cp);
+    List<DTOCashier> getAllCashiersByCP(@Param(value="cp")String cp);
 
     @Query(
             value = "SELECT * " +
