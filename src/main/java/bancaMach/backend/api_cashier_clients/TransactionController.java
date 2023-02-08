@@ -30,9 +30,7 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @Autowired
-    public TransactionController(CashierService cashierService,
-                                 ClientService clientService,
-                                 TransactionService transactionService) {
+    public TransactionController(CashierService cashierService, ClientService clientService, TransactionService transactionService) {
         this.cashierService = cashierService;
         this.clientService = clientService;
         this.transactionService = transactionService;
@@ -42,7 +40,6 @@ public class TransactionController {
     public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction) throws RecordNotFoundException{
         Cashier cashier = cashierService.getCashierById(transaction.getCashier());
         Client client = clientService.getClientById(transaction.getClient());
-        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
         Transaction created = null;
         if(cashier.getAvailable() && transaction.getAmount()>0) {
             if(transaction.getType()){ //enter amount
@@ -53,7 +50,7 @@ public class TransactionController {
                     cashier.setBalance(cashier.getBalance()-transaction.getAmount());
                 }
                 else {
-                    return new ResponseEntity<>(created, new HttpHeaders(), status);
+                    throw new RecordNotFoundException("The cashier does not have enough credit.",-1);
                 }
             }
             try {
@@ -67,9 +64,11 @@ public class TransactionController {
                 throw new RuntimeException(e);
             }
             created = transactionService.createOrUpdateTransaction(created);
-            status=HttpStatus.CREATED;
         }
-        return new ResponseEntity<>(created, new HttpHeaders(), status);
+        else {
+            throw new RecordNotFoundException("The cashier is not available.",-1);
+        }
+        return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
     }
 
     @GetMapping("/transactions")

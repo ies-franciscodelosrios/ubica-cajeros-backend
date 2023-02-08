@@ -32,7 +32,7 @@ public class CashierController {
         this.cashierService = cashierService;
     }
 
-    @PostMapping("/cashier")
+    @PostMapping("/cashiers")
     @Operation(summary = "Creates a cashier")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -56,7 +56,7 @@ public class CashierController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/cashier/{id}")
+    @GetMapping("/cashiers/{id}")
     @Operation(summary = "Shows a cashier by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -71,7 +71,7 @@ public class CashierController {
         return new ResponseEntity<>(cashier,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping("/cashier/{id}")
+    @PutMapping("/cashiers/{id}")
     @Operation(summary = "Edits the cashier information by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -84,7 +84,7 @@ public class CashierController {
         return new ResponseEntity<>(update, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/cashier/{id}")
+    @DeleteMapping("/cashiers/{id}")
     @Operation(summary = "Deletes a cashier by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cashier deleted", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -100,7 +100,7 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
-    @GetMapping("/cashiers/default")
+    @GetMapping("/cashiers/distancedefault")
     public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody DTOCashier georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
