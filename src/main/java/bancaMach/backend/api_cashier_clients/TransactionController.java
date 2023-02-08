@@ -1,8 +1,10 @@
 package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.QRGenerator.QRGenerator;
+import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.DTO.DTOTransaction;
+import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
@@ -37,31 +39,37 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction){
-        Transaction created = new Transaction();
+    public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction) throws RecordNotFoundException{
         Cashier cashier = cashierService.getCashierById(transaction.getCashier());
-        created.setClient(clientService.getClientById(transaction.getUser()));
-        created.setCashier(cashier);
-        created.setInit_date(LocalDateTime.now());
-        created.setEnd_date(LocalDateTime.now().plusHours(12));
-        created.setType(transaction.getType());
-        created.setAmount(transaction.getAmount());
-        if(transaction.getType()){
-            cashier.setBalance(cashier.getBalance()+transaction.getAmount()); //enter amount
+        Client client = clientService.getClientById(transaction.getClient());
+        HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
+        Transaction created = null;
+        if(cashier.getAvailable() && transaction.getAmount()>0) {
+            if(transaction.getType()){ //enter amount
+                cashier.setBalance(cashier.getBalance()+transaction.getAmount());
+            }
+            else { //extract amount
+                if(cashier.getBalance()>0 && cashier.getBalance()-transaction.getAmount()>=0) {
+                    cashier.setBalance(cashier.getBalance()-transaction.getAmount());
+                }
+                else {
+                    return new ResponseEntity<>(created, new HttpHeaders(), status);
+                }
+            }
+            try {
+                String codeText = ""+transaction.getClient()+transaction.getCashier()+transaction.getType()+transaction.getAmount();
+                String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
+                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusHours(12),
+                        transaction.getAmount(),transaction.getType());
+            } catch (WriterException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            created = transactionService.createOrUpdateTransaction(created);
+            status=HttpStatus.CREATED;
         }
-        else {
-            cashier.setBalance(cashier.getBalance()-transaction.getAmount()); //extract amount
-        }
-        try {
-            String qrCodeText = ""+transaction.getUser()+transaction.getCashier()+transaction.getType()+transaction.getAmount();
-            created.setSecutityCode(QRGenerator.generateQRCodeImageAsBase64(qrCodeText,300,300));
-        } catch (WriterException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        created = transactionService.createOrUpdateTransaction(created);
-        return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
+        return new ResponseEntity<>(created, new HttpHeaders(), status);
     }
 
     @GetMapping("/transactions")

@@ -13,7 +13,7 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Query(
             value = "SELECT * " +
                     "FROM cashier " +
-                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 1000) " +
+                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 100) " +
                     "ORDER BY position;",
 
             nativeQuery = true)
