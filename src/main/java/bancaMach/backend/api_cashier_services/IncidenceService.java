@@ -2,7 +2,7 @@ package bancaMach.backend.api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.IncidenceRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.DTOIncidence;
+import bancaMach.backend.api_cashier_models.dataobject.Incidence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +19,9 @@ public class IncidenceService {
      * Method that creates or updates an incidence
      * @param i
      */
-    public DTOIncidence createOrUpdateIncidence(DTOIncidence i) {
+    public Incidence createOrUpdateIncidence(Incidence i) {
         if (i.getId() != null) {
-            Optional<DTOIncidence> incidence = incidenceRepository.findById(i.getId());
+            Optional<Incidence> incidence = incidenceRepository.findById(i.getId());
             if (incidence.isPresent()) {
                 i = incidenceRepository.save(i);
             } else {
@@ -38,7 +38,7 @@ public class IncidenceService {
      *
      * @return
      */
-    public List<DTOIncidence> getAllIncidences() {
+    public List<Incidence> getAllIncidences() {
         return incidenceRepository.findAll();
     }
 
@@ -48,8 +48,8 @@ public class IncidenceService {
      * @param id
      * @return
      */
-    public DTOIncidence getIncidenceById(Long id) {
-        Optional<DTOIncidence> incidence = incidenceRepository.findById(id);
+    public Incidence getIncidenceById(Long id) {
+        Optional<Incidence> incidence = incidenceRepository.findById(id);
         if (incidence.isPresent()) {
             return incidence.get();
         } else {
@@ -61,7 +61,7 @@ public class IncidenceService {
      * Method that deletes an incidence by the id
      */
     public void deleteIncidence(Long id) {
-        Optional<DTOIncidence> i = incidenceRepository.findById(id);
+        Optional<Incidence> i = incidenceRepository.findById(id);
         if (i.isPresent()) {
             incidenceRepository.deleteById(id);
         } else {

@@ -1,4 +1,4 @@
-package bancaMach.backend.api_cashier_models;
+package bancaMach.backend.api_cashier_models.dataobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="cashier")
-public class DTOCashier implements Serializable {
+public class Cashier implements Serializable {
 
     private static final long serialVersion = 1L;
 
@@ -51,14 +51,14 @@ public class DTOCashier implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "cashier")
-    private List<DTOTransaction> transactions;
+    private List<Transaction> transactions;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "cashier")
-    List<DTOIncidence> incidences;
+    List<Incidence> incidences;
 
-    public DTOCashier(Long id, String photo, String address, String locality, String cp, Point position, Double lattitude, Double longitude,
-                      Double balance, Boolean available, List<DTOTransaction> transactions, List<DTOIncidence> incidences) {
+    public Cashier(Long id, String photo, String address, String locality, String cp, Point position, Double lattitude, Double longitude,
+                   Double balance, Boolean available, List<Transaction> transactions, List<Incidence> incidences) {
         this.id = id;
         this.photo = photo;
         this.address = address;
@@ -73,7 +73,7 @@ public class DTOCashier implements Serializable {
         this.incidences = incidences;
     }
 
-    public DTOCashier() {}
+    public Cashier() {}
 
     public Long getId() {
         return id;
@@ -155,19 +155,19 @@ public class DTOCashier implements Serializable {
         this.available = available;
     }
 
-    public List<DTOTransaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(List<DTOTransaction> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
 
-    public List<DTOIncidence> getIncidences() {
+    public List<Incidence> getIncidences() {
         return incidences;
     }
 
-    public void setIncidences(List<DTOIncidence> incidences) {
+    public void setIncidences(List<Incidence> incidences) {
         this.incidences = incidences;
     }
 
@@ -175,7 +175,7 @@ public class DTOCashier implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DTOCashier that = (DTOCashier) o;
+        Cashier that = (Cashier) o;
         return id.equals(that.id);
     }
 

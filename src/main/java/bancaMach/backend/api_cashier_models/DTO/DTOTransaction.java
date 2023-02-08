@@ -1,20 +1,20 @@
-package bancaMach.backend.api_cashier_models;
+package bancaMach.backend.api_cashier_models.DTO;
 
-public class DTORequestTransaction {
+public class DTOTransaction {
 
     private Long user;
     private Long cashier;
     private Boolean type;
     private Double amount;
 
-    public DTORequestTransaction(Long user, Long cashier, Boolean type, Double amount) {
+    public DTOTransaction(Long user, Long cashier, Boolean type, Double amount) {
         this.user = user;
         this.cashier = cashier;
         this.type = type;
         this.amount = amount;
     }
 
-    public DTORequestTransaction() {}
+    public DTOTransaction() {}
 
     public Long getUser() {
         return user;
