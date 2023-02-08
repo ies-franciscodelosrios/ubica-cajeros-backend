@@ -7,14 +7,16 @@ public class DTOCashier implements Serializable {
     private Long user;
     private Double lat;
     private Double lng;
+    private Integer distance;
 
     public DTOCashier() {
     }
 
-    public DTOCashier(Long user, Double lat, Double lng) {
+    public DTOCashier(Long user, Double lat, Double lng, Integer distance) {
         this.user = user;
         this.lat = lat;
         this.lng = lng;
+        this.distance = distance;
     }
 
     public Long getUser() {
@@ -41,13 +43,7 @@ public class DTOCashier implements Serializable {
         this.lng = lng;
     }
 
-    @Override
-    public String toString() {
-        return "DTORequestGeoCashier{" +
-                "user=" + user +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                '}';
-    }
+    public Integer getDistance() {return distance; }
 
+    public void setDistance(Integer distance) { this.distance = distance; }
 }

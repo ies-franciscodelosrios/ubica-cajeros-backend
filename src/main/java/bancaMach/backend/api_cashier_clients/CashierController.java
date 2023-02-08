@@ -100,20 +100,17 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
-    @GetMapping("/cashiers/distanceDefault")
+    @GetMapping("/cashiers/default")
     public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody DTOCashier georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PostMapping("/cashiers/distance/{distanceM}")
-    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(
-            @RequestBody DTOCashier georeq,
-            @PathVariable Integer distanceM){
-        List<Cashier> result = cashierService.getAllCashiersByDistance(georeq.getLat(), georeq.getLng(), distanceM);
+    @PostMapping("/cashiers/distance")
+    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody DTOCashier cashierRequest){
+        List<Cashier> result = cashierService.getAllCashiersByDistance(cashierRequest.getLat(), cashierRequest.getLng(), cashierRequest.getDistance());
         setCoordenates(result);
-        System.out.println(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 

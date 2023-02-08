@@ -53,6 +53,17 @@ public class Transaction implements Serializable {
         this.type = type;
     }
 
+    public Transaction(Client client, Cashier cashier, String secutityCode, LocalDateTime init_date,
+                       LocalDateTime end_date, Double amount, Boolean type) {
+        this.client = client;
+        this.cashier = cashier;
+        this.secutityCode = secutityCode;
+        this.init_date = init_date;
+        this.end_date = end_date;
+        this.amount = amount;
+        this.type = type;
+    }
+
     public Transaction() {}
 
     public Long getId() {
