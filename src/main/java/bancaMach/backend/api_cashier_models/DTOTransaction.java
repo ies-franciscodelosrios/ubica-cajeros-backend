@@ -41,7 +41,6 @@ public class DTOTransaction implements Serializable {
     @Column(name = "type")
     private Boolean type;
 
-
     public DTOTransaction(Long id, DTOClient client, DTOCashier cashier, String  secutityCode, LocalDateTime init_date,
                           LocalDateTime end_date, Double amount, Boolean type) {
         this.id = id;
