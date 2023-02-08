@@ -25,7 +25,7 @@ public class ClientService {
             if (client.isPresent()) {
                 c = clientRepository.save(c);
             } else {
-                throw new RecordNotFoundException("Client nor found.", c);
+                throw new RecordNotFoundException("Client not found.", c);
             }
         } else {
             c = clientRepository.save(c);
