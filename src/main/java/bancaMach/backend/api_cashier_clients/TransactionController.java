@@ -1,9 +1,9 @@
 package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.QRGenerator.QRGenerator;
-import bancaMach.backend.api_cashier_models.DTOCashier;
-import bancaMach.backend.api_cashier_models.DTORequestTransaction;
-import bancaMach.backend.api_cashier_models.DTOTransaction;
+import bancaMach.backend.api_cashier_models.dataobject.Cashier;
+import bancaMach.backend.api_cashier_models.DTO.DTOTransaction;
+import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.TransactionService;
@@ -37,9 +37,9 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<DTOTransaction> createTransaction(@RequestBody DTORequestTransaction transaction){
-        DTOTransaction created = new DTOTransaction();
-        DTOCashier cashier = cashierService.getCashierById(transaction.getCashier());
+    public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction){
+        Transaction created = new Transaction();
+        Cashier cashier = cashierService.getCashierById(transaction.getCashier());
         created.setClient(clientService.getClientById(transaction.getUser()));
         created.setCashier(cashier);
         created.setInit_date(LocalDateTime.now());
@@ -65,15 +65,15 @@ public class TransactionController {
     }
 
     @GetMapping("/transactions")
-    public ResponseEntity<List<DTOTransaction>> getAllTransactions(){
-        List<DTOTransaction> result = transactionService.getAllTransactions();
+    public ResponseEntity<List<Transaction>> getAllTransactions(){
+        List<Transaction> result = transactionService.getAllTransactions();
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/transaction/{id}")
-    public ResponseEntity<DTOTransaction> getTransactionById(@PathVariable Long id) throws IOException {
-        DTOTransaction transaction = transactionService.getTransantionById(id);
-        List<DTOTransaction> aux = new ArrayList<>();
+    public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) throws IOException {
+        Transaction transaction = transactionService.getTransantionById(id);
+        List<Transaction> aux = new ArrayList<>();
         aux.add(transaction);
         return new ResponseEntity<>(transaction,new HttpHeaders(), HttpStatus.OK);
     }

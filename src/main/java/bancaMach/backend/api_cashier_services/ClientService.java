@@ -2,7 +2,7 @@ package bancaMach.backend.api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.ClientRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.DTOClient;
+import bancaMach.backend.api_cashier_models.dataobject.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +19,9 @@ public class ClientService {
      * Method that creates or updates a client
      * @param c
      */
-    public DTOClient createOrUpdateClient(DTOClient c) {
+    public Client createOrUpdateClient(Client c) {
         if (c.getId() != null) {
-            Optional<DTOClient> client = clientRepository.findById(c.getId());
+            Optional<Client> client = clientRepository.findById(c.getId());
             if (client.isPresent()) {
                 c = clientRepository.save(c);
             } else {
@@ -38,7 +38,7 @@ public class ClientService {
      *
      * @return
      */
-    public List<DTOClient> getAllClients() {
+    public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
@@ -48,8 +48,8 @@ public class ClientService {
      * @param id
      * @return
      */
-    public DTOClient getClientById(Long id) {
-        Optional<DTOClient> client = clientRepository.findById(id);
+    public Client getClientById(Long id) {
+        Optional<Client> client = clientRepository.findById(id);
         if (client.isPresent()) {
             return client.get();
         } else {
@@ -61,7 +61,7 @@ public class ClientService {
      * Method that deletes a client by the id
      */
     public void deleteClient(Long id) {
-        Optional<DTOClient> c = clientRepository.findById(id);
+        Optional<Client> c = clientRepository.findById(id);
         if (c.isPresent()) {
             clientRepository.deleteById(id);
         } else {

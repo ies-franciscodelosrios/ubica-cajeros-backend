@@ -1,17 +1,17 @@
-package bancaMach.backend.api_cashier_models;
+package bancaMach.backend.api_cashier_models.DTO;
 
 import java.io.Serializable;
 
-public class DTORequestGeoCashier implements Serializable {
+public class DTOCashier implements Serializable {
     private static final long serialVersion = 1L;
     private Long user;
     private Double lat;
     private Double lng;
 
-    public DTORequestGeoCashier() {
+    public DTOCashier() {
     }
 
-    public DTORequestGeoCashier(Long user, Double lat, Double lng) {
+    public DTOCashier(Long user, Double lat, Double lng) {
         this.user = user;
         this.lat = lat;
         this.lng = lng;
@@ -49,4 +49,5 @@ public class DTORequestGeoCashier implements Serializable {
                 ", lng=" + lng +
                 '}';
     }
+
 }

@@ -2,7 +2,7 @@ package bancaMach.backend.api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.CashierRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.DTOCashier;
+import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -17,9 +17,9 @@ public class CashierService {
     @Autowired
     ClientService clientService;
 
-    public DTOCashier createOrUpdateCashier(DTOCashier cashier){
+    public Cashier createOrUpdateCashier(Cashier cashier){
         if (cashier.getId()!=null){
-            Optional<DTOCashier> c = cashierRepository.findById(cashier.getId());
+            Optional<Cashier> c = cashierRepository.findById(cashier.getId());
             if (c.isPresent()){
                 cashier = cashierRepository.save(cashier);
             }else{
@@ -31,10 +31,10 @@ public class CashierService {
         return cashier;
     }
 
-    public List<DTOCashier> getAllCashiers() { return cashierRepository.findAll(); }
+    public List<Cashier> getAllCashiers() { return cashierRepository.findAll(); }
 
-    public DTOCashier getCashierById(Long id){
-        Optional<DTOCashier> cashier = cashierRepository.findById(id);
+    public Cashier getCashierById(Long id){
+        Optional<Cashier> cashier = cashierRepository.findById(id);
         if (cashier.isPresent()){
             return cashier.get();
         }else{
@@ -43,7 +43,7 @@ public class CashierService {
     }
 
     public void deleteCashierById(Long id){
-        Optional<DTOCashier> cashier = cashierRepository.findById(id);
+        Optional<Cashier> cashier = cashierRepository.findById(id);
         if (cashier.isPresent()){
             cashierRepository.deleteById(id);
         }else{
@@ -51,17 +51,17 @@ public class CashierService {
         }
     }
 
-    public List<DTOCashier> getAllCashiersByLoc(Double lat, Double lng){
+    public List<Cashier> getAllCashiersByLoc(Double lat, Double lng){
         //middleware
         return cashierRepository.getAllCashiersByLoc(lat, lng);
     }
 
-    public List<DTOCashier> getAllCashiersByCP(String cp){
+    public List<Cashier> getAllCashiersByCP(String cp){
         //middleware
         return cashierRepository.getAllCashiersByCP(cp);
     }
 
-    public List<DTOCashier> getAllCashiersByDistance(Double lat, Double lng, Integer distanceM){
+    public List<Cashier> getAllCashiersByDistance(Double lat, Double lng, Integer distanceM){
         //middleware
         return cashierRepository.getAllCashiersByDistance(lat,lng, distanceM);
     }
