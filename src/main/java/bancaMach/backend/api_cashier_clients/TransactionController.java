@@ -36,7 +36,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/transaction")
+    @PostMapping("/transactions")
     public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction) throws RecordNotFoundException{
         Cashier cashier = cashierService.getCashierById(transaction.getCashier());
         Client client = clientService.getClientById(transaction.getClient());
@@ -56,7 +56,7 @@ public class TransactionController {
             try {
                 String codeText = ""+transaction.getClient()+transaction.getCashier()+transaction.getType()+transaction.getAmount();
                 String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusHours(12),
+                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusHours(1),
                         transaction.getAmount(),transaction.getType());
             } catch (WriterException e) {
                 throw new RuntimeException(e);
@@ -77,7 +77,7 @@ public class TransactionController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/transaction/{id}")
+    @GetMapping("/transactions/{id}")
     public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id) throws IOException {
         Transaction transaction = transactionService.getTransantionById(id);
         List<Transaction> aux = new ArrayList<>();
