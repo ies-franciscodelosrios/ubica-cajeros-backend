@@ -100,7 +100,7 @@ public class CashierController {
      * GEOLOC ENDPOINTS
      */
 
-    @GetMapping("/cashiers/distancedefault")
+    @PostMapping("/cashiers/distancedefault")
     public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody DTOCashier georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
