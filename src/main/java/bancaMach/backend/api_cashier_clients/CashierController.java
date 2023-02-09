@@ -2,7 +2,6 @@ package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTOCashier;
-import bancaMach.backend.api_cashier_models.DTOClient;
 import bancaMach.backend.api_cashier_models.DTORequestGeoCashier;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;

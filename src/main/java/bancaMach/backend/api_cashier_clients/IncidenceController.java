@@ -60,7 +60,7 @@ public class IncidenceController {
             @ApiResponse(responseCode = "400", description = "Incidence not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Incidence's Is not found", content = @Content)
     })
-    public ResponseEntity<DTOIncidence> getIncidencetById(@PathVariable Long id){
+    public ResponseEntity<DTOIncidence> getIncidenceById(@PathVariable Long id){
         DTOIncidence incidence = incidenceService.getIncidenceById(id);
         List<DTOIncidence> aux = new ArrayList<>();
         aux.add(incidence);

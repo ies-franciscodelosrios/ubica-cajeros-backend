@@ -17,12 +17,14 @@ public class DTOIncidence implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JsonBackReference
+    //git @JsonBackReference
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "client_id")
     private DTOClient client;
 
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "cashier_id")
     private DTOCashier cashier;
