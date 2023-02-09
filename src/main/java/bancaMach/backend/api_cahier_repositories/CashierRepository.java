@@ -1,6 +1,6 @@
 package bancaMach.backend.api_cahier_repositories;
 
-import bancaMach.backend.api_cashier_models.DTOCashier;
+import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CashierRepository extends JpaRepository<DTOCashier, Long> {
+public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Query(
             value = "SELECT * " +
                     "FROM cashier " +
-                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 1000) " +
+                    "WHERE ST_DWithin(position, ST_MakePoint(:lat, :lng), 100) " +
                     "ORDER BY position;",
 
             nativeQuery = true)
-    List<DTOCashier> getAllCashiersByLoc(@Param(value="lat")Double lat,@Param(value="lng")Double lng);
+    List<Cashier> getAllCashiersByLoc(@Param(value="lat")Double lat, @Param(value="lng")Double lng);
 
     @Query(
             value = "SELECT * " +
@@ -25,7 +25,7 @@ public interface CashierRepository extends JpaRepository<DTOCashier, Long> {
                     "WHERE cp like :cp " +
                     "ORDER BY position;",
             nativeQuery = true)
-    List<DTOCashier> getAllCashiersByCP(@Param(value="cp")String cp);
+    List<Cashier> getAllCashiersByCP(@Param(value="cp")String cp);
 
     @Query(
             value = "SELECT * " +
@@ -33,7 +33,7 @@ public interface CashierRepository extends JpaRepository<DTOCashier, Long> {
                     "WHERE ST_DWithin(position, ST_MakePoint(:lat,:lng), :distanceM) " +
                     "ORDER BY position;",
             nativeQuery = true)
-    List<DTOCashier> getAllCashiersByDistance(
+    List<Cashier> getAllCashiersByDistance(
             @Param(value="lat")Double lat,
             @Param(value="lng")Double lng,
             @Param(value="distanceM") Integer distanceM

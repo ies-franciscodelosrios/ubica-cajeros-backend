@@ -1,14 +1,14 @@
-package bancaMach.backend.api_cashier_models;
+package bancaMach.backend.api_cashier_models.dataobject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "client")
-public class DTOClient implements Serializable {
+public class Client implements Serializable {
 
     private static final long serialVersion = 1L;
 
@@ -23,17 +23,17 @@ public class DTOClient implements Serializable {
     @JsonIgnore
     //@JsonManagedReference
     @OneToMany(mappedBy = "client")
-    List<DTOTransaction> transactions;
+    List<Transaction> transactions;
 
 
     @JsonIgnore
     //@JsonManagedReference
     @OneToMany(mappedBy = "client")
-    List<DTOIncidence> incidences;
+    List<Incidence> incidences;
 
-    public DTOClient() {
+    public Client() {
     }
-    public DTOClient(Long id, String account, List<DTOTransaction> transactions, List<DTOIncidence> incidences) {
+    public Client(Long id, String account, List<Transaction> transactions, List<Incidence> incidences) {
         this.id = id;
         this.account = account;
         this.transactions = transactions;
@@ -52,16 +52,16 @@ public class DTOClient implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
-    public List<DTOTransaction> getTransactions() {
+    public List<Transaction> getTransactions() {
         return transactions;
     }
-    public void setTransactions(List<DTOTransaction> transactions) {
+    public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }
-    public List<DTOIncidence> getIncidences() {
+    public List<Incidence> getIncidences() {
         return incidences;
     }
-    public void setIncidences(List<DTOIncidence> incidences) {
+    public void setIncidences(List<Incidence> incidences) {
         this.incidences = incidences;
     }
 }

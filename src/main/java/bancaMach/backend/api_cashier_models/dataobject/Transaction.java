@@ -1,4 +1,4 @@
-package bancaMach.backend.api_cashier_models;
+package bancaMach.backend.api_cashier_models.dataobject;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction")
-public class DTOTransaction implements Serializable {
+public class Transaction implements Serializable {
 
     private static final long serialVersion = 1L;
 
@@ -19,12 +19,12 @@ public class DTOTransaction implements Serializable {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "client_id")
-    private DTOClient client;
+    private Client client;
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cashier_id")
-    private DTOCashier cashier;
+    private Cashier cashier;
 
     @Column(name = "security_code")
     private String secutityCode;
@@ -41,9 +41,8 @@ public class DTOTransaction implements Serializable {
     @Column(name = "type")
     private Boolean type;
 
-
-    public DTOTransaction(Long id, DTOClient client, DTOCashier cashier, String  secutityCode, LocalDateTime init_date,
-                          LocalDateTime end_date, Double amount, Boolean type) {
+    public Transaction(Long id, Client client, Cashier cashier, String  secutityCode, LocalDateTime init_date,
+                       LocalDateTime end_date, Double amount, Boolean type) {
         this.id = id;
         this.client = client;
         this.cashier = cashier;
@@ -54,7 +53,18 @@ public class DTOTransaction implements Serializable {
         this.type = type;
     }
 
-    public DTOTransaction() {}
+    public Transaction(Client client, Cashier cashier, String secutityCode, LocalDateTime init_date,
+                       LocalDateTime end_date, Double amount, Boolean type) {
+        this.client = client;
+        this.cashier = cashier;
+        this.secutityCode = secutityCode;
+        this.init_date = init_date;
+        this.end_date = end_date;
+        this.amount = amount;
+        this.type = type;
+    }
+
+    public Transaction() {}
 
     public Long getId() {
         return id;
@@ -64,19 +74,19 @@ public class DTOTransaction implements Serializable {
         this.id = id;
     }
 
-    public DTOClient getClient() {
+    public Client getClient() {
         return client;
     }
 
-    public void setClient(DTOClient client) {
+    public void setClient(Client client) {
         this.client = client;
     }
 
-    public DTOCashier getCashier() {
+    public Cashier getCashier() {
         return cashier;
     }
 
-    public void setCashier(DTOCashier cashier) {
+    public void setCashier(Cashier cashier) {
         this.cashier = cashier;
     }
 

@@ -1,7 +1,7 @@
 package api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.ClientRepository;
-import bancaMach.backend.api_cashier_models.DTOClient;
+import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_services.ClientService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +21,7 @@ class ClientServiceTest {
     ClientService clientService;
 
     @Test
-    void createOrUpdateClient(DTOClient c) {
+    void createOrUpdateClient(Client c) {
         clientService = new ClientService();
         assertEquals("manolo@gmail.com", clientService.getClientById(1L).getAccount());
     }
