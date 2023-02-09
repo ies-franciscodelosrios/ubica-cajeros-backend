@@ -1,6 +1,7 @@
 package bancaMach.backend.api_cashier_models.dataobject;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,12 +17,14 @@ public class Incidence implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonIgnore
     @ManyToOne()
     @JoinColumn(name = "cashier_id")
     private Cashier cashier;
@@ -31,6 +34,11 @@ public class Incidence implements Serializable {
 
     public Incidence(Long id, Client client, Cashier cashier, String message) {
         this.id = id;
+        this.client = client;
+        this.cashier = cashier;
+        this.message = message;
+    }
+    public Incidence(Client client, Cashier cashier, String message) {
         this.client = client;
         this.cashier = cashier;
         this.message = message;

@@ -1,8 +1,12 @@
 package bancaMach.backend.api_cashier_clients;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
+import bancaMach.backend.api_cashier_models.DTO.DTOIncidence;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
+import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Incidence;
+import bancaMach.backend.api_cashier_services.CashierService;
+import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.IncidenceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,10 +28,15 @@ import java.util.List;
 public class IncidenceController {
 
     private IncidenceService incidenceService;
+    private ClientService clientService;
+    private CashierService cashierService;
 
     @Autowired
-    public IncidenceController(IncidenceService incidenceService) {
+    public IncidenceController(IncidenceService incidenceService, ClientService clientService, CashierService cashierService) {
         this.incidenceService = incidenceService;
+        this.clientService = clientService;
+        this.cashierService = cashierService;
+
     }
 
     @PostMapping("/incidence")
@@ -36,8 +45,16 @@ public class IncidenceController {
             @ApiResponse(responseCode = "200", description = "Incidence created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
             @ApiResponse(responseCode = "400", description = "Incidence not created", content = @Content),
     })
-    public ResponseEntity<Incidence> createIncidence(@RequestBody Incidence incidence){
-        Incidence created = incidenceService.createOrUpdateIncidence(incidence);
+    public ResponseEntity<Incidence> createIncidence(@RequestBody DTOIncidence incidence) throws RecordNotFoundException{
+        Client client = clientService.getClientById(incidence.getClient());
+        Cashier cashier = cashierService.getCashierById(incidence.getCashier());
+        Incidence created = null;
+        if(cashier.getAvailable()){
+            created = new Incidence(client, cashier, incidence.getMessage());
+            created = incidenceService.createOrUpdateIncidence(created);
+        }else{
+            throw new RecordNotFoundException("Incidence not created", -2);
+        }
         return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
     }
 
@@ -60,7 +77,7 @@ public class IncidenceController {
             @ApiResponse(responseCode = "400", description = "Incidence not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Incidence's Is not found", content = @Content)
     })
-    public ResponseEntity<Incidence> getIncidencetById(@PathVariable Long id){
+    public ResponseEntity<Incidence> getIncidenceById(@PathVariable Long id){
         Incidence incidence = incidenceService.getIncidenceById(id);
         List<Incidence> aux = new ArrayList<>();
         aux.add(incidence);
