@@ -39,7 +39,7 @@ public class IncidenceController {
 
     }
 
-    @PostMapping("/incidence")
+    @PostMapping("/incidences")
     @Operation(summary = "Creates an incidence")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidence created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -70,7 +70,7 @@ public class IncidenceController {
         return new ResponseEntity<>(result,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @GetMapping("/incidence/{id}")
+    @GetMapping("/incidences/{id}")
     @Operation(summary = "Shows an incidence by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidence found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -84,7 +84,7 @@ public class IncidenceController {
         return new ResponseEntity<>(incidence,new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping("/incidence/{id}")
+    @PutMapping("/incidences/{id}")
     @Operation(summary = "Edits the incidence information by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidence edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
@@ -97,7 +97,7 @@ public class IncidenceController {
         return new ResponseEntity<>(update, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/incidence/{id}")
+    @DeleteMapping("/incidences/{id}")
     @Operation(summary = "Deletes an incidence by his id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidence deleted", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
