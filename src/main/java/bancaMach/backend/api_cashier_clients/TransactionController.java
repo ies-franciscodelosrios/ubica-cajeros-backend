@@ -56,7 +56,7 @@ public class TransactionController {
             try {
                 String codeText = ""+transaction.getClient()+transaction.getCashier()+transaction.getType()+transaction.getAmount();
                 String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusHours(1),
+                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusMinutes(2),
                         transaction.getAmount(),transaction.getType());
             } catch (WriterException e) {
                 throw new RuntimeException(e);
