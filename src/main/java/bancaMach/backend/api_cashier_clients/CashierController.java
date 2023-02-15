@@ -101,6 +101,12 @@ public class CashierController {
      */
 
     @PostMapping("/cashiers/distancedefault")
+    @Operation(summary = "Get cashiers by default rasius distance")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
     public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody DTOCashier georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
@@ -108,6 +114,12 @@ public class CashierController {
     }
 
     @PostMapping("/cashiers/distance")
+    @Operation(summary = "Shows all the cashier by his distance between it and the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashiers found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashiers not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
     public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody DTOCashier cashierRequest){
         List<Cashier> result = cashierService.getAllCashiersByDistance(cashierRequest.getLat(), cashierRequest.getLng(), cashierRequest.getDistance());
         setCoordenates(result);
@@ -123,6 +135,19 @@ public class CashierController {
     })
     public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@PathVariable("cp") String cp){
         List<Cashier> result = cashierService.getAllCashiersByCP(cp);
+        setCoordenates(result);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/cashiers/address/{address}")
+    @Operation(summary = "Get cashiers by his address")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cashier found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
+            @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
+    })
+    public ResponseEntity<List<Cashier>> getAllCashiersByAddress(@PathVariable("address") String address){
+        List<Cashier> result = cashierService.getAllCashiersByAddress(address);
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }

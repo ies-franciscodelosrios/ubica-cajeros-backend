@@ -65,4 +65,9 @@ public class CashierService {
         //middleware
         return cashierRepository.getAllCashiersByDistance(lat,lng, distanceM);
     }
+
+    public List<Cashier> getAllCashiersByAddress(String address){
+        //middleware
+        return cashierRepository.getAllCashiersByAddress(address);
+    }
 }

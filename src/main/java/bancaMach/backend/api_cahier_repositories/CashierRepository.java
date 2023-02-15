@@ -38,4 +38,12 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
             @Param(value="lng")Double lng,
             @Param(value="distanceM") Integer distanceM
     );
+
+    @Query(
+            value = "SELECT * " +
+                    "FROM cashier " +
+                    "WHERE address ilike %:address% " +
+                    "ORDER BY position;",
+            nativeQuery = true)
+    List<Cashier> getAllCashiersByAddress(@Param(value="address")String address);
 }
