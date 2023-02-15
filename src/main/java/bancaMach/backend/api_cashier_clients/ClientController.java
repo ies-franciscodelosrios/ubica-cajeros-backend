@@ -3,6 +3,8 @@ package bancaMach.backend.api_cashier_clients;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_services.ClientService;
+import bancaMach.backend.data_validation.DNIValidator;
+import bancaMach.backend.data_validation.RegexValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
