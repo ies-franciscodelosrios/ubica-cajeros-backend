@@ -20,11 +20,19 @@ public class Client implements Serializable {
     @Column(name = "account")
     private String account;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "dni")
+    private String dni;
+
+    @Column(name = "email")
+    private String email;
+
     @JsonIgnore
     //@JsonManagedReference
     @OneToMany(mappedBy = "client")
     List<Transaction> transactions;
-
 
     @JsonIgnore
     //@JsonManagedReference
@@ -33,9 +41,13 @@ public class Client implements Serializable {
 
     public Client() {
     }
-    public Client(Long id, String account, List<Transaction> transactions, List<Incidence> incidences) {
+
+    public Client(Long id, String account, String password, String dni, String email, List<Transaction> transactions, List<Incidence> incidences) {
         this.id = id;
         this.account = account;
+        this.password = password;
+        this.dni = dni;
+        this.email = email;
         this.transactions = transactions;
         this.incidences = incidences;
     }
@@ -49,6 +61,12 @@ public class Client implements Serializable {
     public String getAccount() {
         return account;
     }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     public void setAccount(String account) {
         this.account = account;
     }
