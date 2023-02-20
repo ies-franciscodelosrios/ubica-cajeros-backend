@@ -54,6 +54,24 @@ public class ClientController {
         return new ResponseEntity<>(client, new HttpHeaders(), HttpStatus.OK);
     }
 
+    @GetMapping("/client/dni/{dni}")
+    @Operation(summary = "Get a client by his DNI")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
+    })
+    public ResponseEntity<Client> getClientByDNI(@PathVariable("dni") String dni) throws RecordNotFoundException{
+        Client client = null;
+        if(DNIValidator.DNIValidator(dni)){
+            client = clientService.getClientByDNI(dni);
+        }
+        else {
+            throw new RecordNotFoundException("Invalid dni.",-1);
+        }
+        return new ResponseEntity<>(client, new HttpHeaders(), HttpStatus.OK);
+    }
+
     @PostMapping("/client")
     @Operation(summary = "Creates a client")
     @ApiResponses(value = {
@@ -61,7 +79,13 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Client not created", content = @Content),
     })
     public ResponseEntity<Client> createClient(@RequestBody Client client) throws RecordNotFoundException{
-        Client clientCreated = clientService.createOrUpdateClient(client);
+        Client clientCreated = null;
+        if(DNIValidator.DNIValidator(client.getDni()) && RegexValidator.validatePasswordFormat(client.getPassword())){
+            clientCreated = clientService.createOrUpdateClient(client);
+        }
+        else {
+            throw new RecordNotFoundException("Incorrect registry data.",-1);
+        }
         return new ResponseEntity<>(clientCreated, new HttpHeaders(), HttpStatus.OK);
     }
 

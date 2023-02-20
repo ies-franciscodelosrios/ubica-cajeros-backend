@@ -58,6 +58,21 @@ public class ClientService {
     }
 
     /**
+     * Method that get a client by the DNI
+     *
+     * @param dni
+     * @return
+     */
+    public Client getClientByDNI(String dni) {
+       Optional<Client> client = clientRepository.getClientByDNI(dni);
+        if (client.isPresent()) {
+            return client.get();
+        } else {
+            throw new RecordNotFoundException("Client not found.", dni);
+        }
+    }
+
+    /**
      * Method that deletes a client by the id
      */
     public void deleteClient(Long id) {
