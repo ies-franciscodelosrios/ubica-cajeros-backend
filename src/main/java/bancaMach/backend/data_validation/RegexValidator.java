@@ -19,7 +19,7 @@ public class RegexValidator {
      * @return True or false if it agrees
      */
     public static boolean validateDNIFormat(String dni) {
-        return dni.matches("/^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/i");
+        return dni.matches("^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$");
     }
 
     /**
