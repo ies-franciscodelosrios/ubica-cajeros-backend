@@ -1,6 +1,6 @@
-package bancaMach.backend.api_cashier_clients;
+package bancaMach.backend.controllers;
 
-import bancaMach.backend.QRGenerator.QRGenerator;
+import bancaMach.backend.utils.QRGenerator.QRGenerator;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.DTO.DTOTransaction;

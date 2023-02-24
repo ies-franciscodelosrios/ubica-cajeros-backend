@@ -1,4 +1,4 @@
-package bancaMach.backend.data_validation;
+package bancaMach.backend.utils.data_validation;
 
 public class DNIValidator {
 

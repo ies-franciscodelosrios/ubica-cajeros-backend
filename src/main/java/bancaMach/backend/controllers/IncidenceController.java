@@ -1,4 +1,4 @@
-package bancaMach.backend.api_cashier_clients;
+package bancaMach.backend.controllers;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.DTO.DTOIncidence;
