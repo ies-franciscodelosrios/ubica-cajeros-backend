@@ -18,6 +18,6 @@ pipeline {
             steps {
                 sh 'cd dist && cp -vr . /usr/share/nginx/www/public'
             }
-        }
-    }
+        }
+    }
 }
