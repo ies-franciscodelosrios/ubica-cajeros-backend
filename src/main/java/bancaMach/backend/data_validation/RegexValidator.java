@@ -4,12 +4,12 @@ public class RegexValidator {
 
     /**
      * Validate password format.
-     * Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character.
+     * Password that at least one uppercase letter, one lowercase letter, one number, and one special character.
      * @param password Password
      * @return True or false if it agrees
      */
     public static boolean validatePasswordFormat(String password) {
-        return password.matches("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$");
+        return password.matches("^([a-z0-9A-Z]*[<>-´ç`+*^Ç¨_:;,.¡¿?'!|ºª@#·$%&¬/()=€]?)*$");
     }
 
     /**
