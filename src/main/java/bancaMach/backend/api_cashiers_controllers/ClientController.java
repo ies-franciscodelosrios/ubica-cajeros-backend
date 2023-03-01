@@ -6,6 +6,7 @@ import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.utils.data_validation.DNIValidator;
 import bancaMach.backend.utils.data_validation.RegexValidator;
 import bancaMarch.clientFeign.user.UserFeignClient;
+import bancaMarch.dto.users.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,8 +40,8 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Clients not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Clients not found", content = @Content)
     })
-    public ResponseEntity<List<Client>> getAllClients(){
-        List<Client> result = feignClient.getAllClients();
+    public ResponseEntity<List<UserDTO>> getAllClients(){
+        List<UserDTO> result = feignClient.getAllClients();
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
