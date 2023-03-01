@@ -1,10 +1,10 @@
-package bancaMach.backend.controllers;
+package bancaMach.backend.api_cashiers_controllers;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.DTO.DTOCashier;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
+import bancaMarch.dto.atm.AtmDAO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -107,7 +107,7 @@ public class CashierController {
             @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
     })
-    public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody DTOCashier georeq) {
+    public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody AtmDAO georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
@@ -120,7 +120,7 @@ public class CashierController {
             @ApiResponse(responseCode = "400", description = "Cashiers not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
     })
-    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody DTOCashier cashierRequest){
+    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody AtmDAO cashierRequest){
         List<Cashier> result = cashierService.getAllCashiersByDistance(cashierRequest.getLat(), cashierRequest.getLng(), cashierRequest.getDistance());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);

@@ -1,15 +1,15 @@
-package bancaMach.backend.controllers;
+package bancaMach.backend.api_cashiers_controllers;
 
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
-import bancaMach.backend.api_cashier_models.DTO.DTOTransaction;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.TransactionService;
 import com.google.zxing.WriterException;
+import bancaMarch.dto.transactions.TransactionDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,7 +47,7 @@ public class TransactionController {
             @ApiResponse(responseCode = "200", description = "Transaction created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))}),
             @ApiResponse(responseCode = "400", description = "Transaction not created", content = @Content),
     })
-    public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction) throws RecordNotFoundException{
+    public ResponseEntity<Transaction> createTransaction(@RequestBody TransactionDTO transaction) throws RecordNotFoundException{
         Cashier cashier = cashierService.getCashierById(transaction.getCashier());
         Client client = clientService.getClientById(transaction.getClient());
         Transaction created = null;
