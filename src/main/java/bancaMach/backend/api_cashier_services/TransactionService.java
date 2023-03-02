@@ -6,6 +6,7 @@ import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
+import bancaMach.backend.utils.data_extract.DataExtract;
 import bancaMarch.dto.transactions.TransactionDTO;
 import bancaMarch.dto.transactions.TransactionRequestDTO;
 import bancaMarch.dto.transactions.TransactionResponseDTO;
@@ -43,7 +44,7 @@ public class TransactionService {
         }else{
             if(cashier.getAvailable() && transaction.getAmount()>0) {
                 try {
-                    String codeText = ""+transaction.getId();
+                    String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId();
                     String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
                     transaction = new Transaction(client,cashier,qrCode, LocalDateTime.now(),LocalDateTime.now().plusMinutes(2),
                             transaction.getAmount(),transaction.getType());
@@ -91,15 +92,35 @@ public class TransactionService {
 
     public TransactionResponseDTO getTransactionStatus(TransactionRequestDTO requestDTO) {
         TransactionResponseDTO responseDTO = null;
-        if (transaction.getType()) { //enter amount
-            cashier.setBalance(cashier.getBalance() + transaction.getAmount());
-        } else { //extract amount
-            if (cashier.getBalance() > 0 && cashier.getBalance() - transaction.getAmount() >= 0) {
-                cashier.setBalance(cashier.getBalance() - transaction.getAmount());
-            } else {
-                throw new RecordNotFoundException("The cashier does not have enough credit.", -1);
+        String status = "Data error, transaction data does not match.";
+        Double amount = Double.valueOf(0);
+        String[] info = DataExtract.QRDataText(requestDTO.getSecurityCode());
+        Client user = clientService.getClientById(Long.parseLong(info[0]));
+        Cashier atm = cashierService.getCashierById(Long.parseLong(info[1]));
+        Transaction transaction = this.getTransantionById(Long.parseLong(info[2]));
+        if(transaction!=null && user!=null && atm!=null &&
+                transaction.getClient().getId()==user.getId() && transaction.getCashier().getId()==atm.getId()) {
+            if(transaction.getEnd_date().isAfter(LocalDateTime.now())) {
+                if (transaction.getType()) { //enter amount
+                    atm.setBalance(atm.getBalance() + transaction.getAmount());
+                    status="Transaction accepted.";
+                    amount=transaction.getAmount();
+                } else { //extract amount
+                    if (atm.getBalance() > 0 && atm.getBalance() - transaction.getAmount() >= 0) {
+                        atm.setBalance(atm.getBalance() - transaction.getAmount());
+                        status="Transaction accepted.";
+                        amount=transaction.getAmount()*-1;
+                    } else {
+                        status="Error, ATM does not have enough balance.";
+                    }
+                }
+            }
+            else {
+                status="Error, security code has expired.";
             }
         }
+        responseDTO.setStatus(status);
+        responseDTO.setAmount(amount);
         return responseDTO;
     }
 }
