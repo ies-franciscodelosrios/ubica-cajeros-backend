@@ -1,15 +1,13 @@
-package bancaMach.backend.api_cashier_clients;
+package bancaMach.backend.api_cashiers_controllers;
 
-import bancaMach.backend.QRGenerator.QRGenerator;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.dataobject.Cashier;
-import bancaMach.backend.api_cashier_models.DTO.DTOTransaction;
-import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.TransactionService;
-import com.google.zxing.WriterException;
+import bancaMarch.dto.transactions.TransactionRequestDTO;
+import bancaMarch.dto.transactions.TransactionDTO;
+import bancaMarch.dto.transactions.TransactionResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,39 +44,10 @@ public class TransactionController {
             @ApiResponse(responseCode = "200", description = "Transaction created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))}),
             @ApiResponse(responseCode = "400", description = "Transaction not created", content = @Content),
     })
-    public ResponseEntity<Transaction> createTransaction(@RequestBody DTOTransaction transaction) throws RecordNotFoundException{
-        Cashier cashier = cashierService.getCashierById(transaction.getCashier());
-        Client client = clientService.getClientById(transaction.getClient());
-        Transaction created = null;
-        if(cashier.getAvailable() && transaction.getAmount()>0) {
-            if(transaction.getType()){ //enter amount
-                cashier.setBalance(cashier.getBalance()+transaction.getAmount());
-            }
-            else { //extract amount
-                if(cashier.getBalance()>0 && cashier.getBalance()-transaction.getAmount()>=0) {
-                    cashier.setBalance(cashier.getBalance()-transaction.getAmount());
-                }
-                else {
-                    throw new RecordNotFoundException("The cashier does not have enough credit.",-1);
-                }
-            }
-            try {
-                String codeText = ""+transaction.getClient()+transaction.getCashier()+transaction.getType()+transaction.getAmount();
-                String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                created = new Transaction(client,cashier,qrCode,LocalDateTime.now(),LocalDateTime.now().plusMinutes(2),
-                        transaction.getAmount(),transaction.getType());
-            } catch (WriterException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            created = transactionService.createOrUpdateTransaction(created);
-        }
-        else {
-            throw new RecordNotFoundException("The cashier is not available.",-1);
-        }
-        return new ResponseEntity<>(created, new HttpHeaders(), HttpStatus.CREATED);
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody TransactionDTO transaction) throws RecordNotFoundException{
+        return new ResponseEntity<>(transactionService.createOrUpdateTransaction(transaction), new HttpHeaders(), HttpStatus.CREATED);
     }
+
 
     @GetMapping("/transactions")
     @Operation(summary = "Get all the transactions")
@@ -105,5 +73,11 @@ public class TransactionController {
         List<Transaction> aux = new ArrayList<>();
         aux.add(transaction);
         return new ResponseEntity<>(transaction,new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/transactions/status")
+    public ResponseEntity<TransactionResponseDTO> getTransactionStatus(@RequestBody TransactionRequestDTO requestDTO){
+        TransactionResponseDTO responseDTO = transactionService.getTransactionStatus(requestDTO);
+        return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
     }
 }

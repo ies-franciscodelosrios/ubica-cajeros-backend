@@ -1,4 +1,4 @@
-package bancaMach.backend.data_hasher;
+package bancaMach.backend.utils.data_hasher;
 
 public class DataHasher {
 

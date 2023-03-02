@@ -1,4 +1,4 @@
-package bancaMach.backend.QRGenerator;
+package bancaMach.backend.utils.QRGenerator;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

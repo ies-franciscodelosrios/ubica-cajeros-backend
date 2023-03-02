@@ -1,13 +1,13 @@
-package bancaMach.backend.api_cashier_clients;
+package bancaMach.backend.api_cashiers_controllers;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
-import bancaMach.backend.api_cashier_models.DTO.DTOIncidence;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Incidence;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.IncidenceService;
+import bancaMarch.dto.incidences.IncidenceDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,7 +45,7 @@ public class IncidenceController {
             @ApiResponse(responseCode = "200", description = "Incidence created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
             @ApiResponse(responseCode = "400", description = "Incidence not created", content = @Content),
     })
-    public ResponseEntity<Incidence> createIncidence(@RequestBody DTOIncidence incidence) throws RecordNotFoundException{
+    public ResponseEntity<Incidence> createIncidence(@RequestBody IncidenceDTO incidence) throws RecordNotFoundException{
         Client client = clientService.getClientById(incidence.getClient());
         Cashier cashier = cashierService.getCashierById(incidence.getCashier());
         Incidence created = null;
