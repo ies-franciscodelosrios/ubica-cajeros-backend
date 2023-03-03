@@ -41,8 +41,11 @@ public class Transaction implements Serializable {
     @Column(name = "type")
     private Boolean type;
 
+    @Column(name = "finished")
+    private Boolean finished;
+
     public Transaction(Long id, Client client, Cashier cashier, String  secutityCode, LocalDateTime init_date,
-                       LocalDateTime end_date, Double amount, Boolean type) {
+                       LocalDateTime end_date, Double amount, Boolean type, Boolean finished) {
         this.id = id;
         this.client = client;
         this.cashier = cashier;
@@ -51,10 +54,11 @@ public class Transaction implements Serializable {
         this.end_date = end_date;
         this.amount = amount;
         this.type = type;
+        this.finished = finished;
     }
 
     public Transaction(Client client, Cashier cashier, String secutityCode, LocalDateTime init_date,
-                       LocalDateTime end_date, Double amount, Boolean type) {
+                       LocalDateTime end_date, Double amount, Boolean type, Boolean finished) {
         this.client = client;
         this.cashier = cashier;
         this.secutityCode = secutityCode;
@@ -62,6 +66,7 @@ public class Transaction implements Serializable {
         this.end_date = end_date;
         this.amount = amount;
         this.type = type;
+        this.finished = finished;
     }
 
     public Transaction() {}
@@ -128,5 +133,13 @@ public class Transaction implements Serializable {
 
     public void setType(Boolean type) {
         this.type = type;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 }

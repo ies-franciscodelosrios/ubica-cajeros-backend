@@ -8,6 +8,6 @@ public class DataExtract {
      * @return String array with data
      */
     public static String[] QRDataText(String data) {
-        return new String[data.split("_").length];
+        return data.split("_");
     }
 }

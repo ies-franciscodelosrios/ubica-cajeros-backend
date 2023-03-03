@@ -48,7 +48,6 @@ public class TransactionController {
         return new ResponseEntity<>(transactionService.createOrUpdateTransaction(transaction), new HttpHeaders(), HttpStatus.CREATED);
     }
 
-
     @GetMapping("/transactions")
     @Operation(summary = "Get all the transactions")
     @ApiResponses(value = {
@@ -76,7 +75,7 @@ public class TransactionController {
     }
 
 
-    @GetMapping("/transactions/status")
+    @PostMapping("/transactions/status")
     public ResponseEntity<TransactionResponseDTO> getTransactionStatus(@RequestBody TransactionRequestDTO requestDTO){
         TransactionResponseDTO responseDTO = transactionService.getTransactionStatus(requestDTO);
         return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
