@@ -10,10 +10,10 @@ import bancaMach.backend.utils.data_extract.DataExtract;
 import bancaMarch.dto.transactions.TransactionDTO;
 import bancaMarch.dto.transactions.TransactionRequestDTO;
 import bancaMarch.dto.transactions.TransactionResponseDTO;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,8 +32,8 @@ public class TransactionService {
     public TransactionDTO createOrUpdateTransaction(TransactionDTO dto){
         Cashier cashier = cashierService.getCashierById(dto.getCashier());
         Client client = clientService.getClientById(dto.getClient());
-        Transaction transaction = new Transaction(dto.getId(),client, cashier, dto.getSecurityCode(),dto.getInit_date(),
-                                                    dto.getEnd_date(), dto.getAmount(),dto.getType());
+        Transaction transaction = new Transaction(dto.getId(), client, cashier, dto.getSecurityCode(),dto.getInit_date(),
+                                                    dto.getEnd_date(), dto.getAmount(),dto.getType(), false);
         if (transaction.getId()!=null){
             Optional<Transaction> t = transactionRepository.findById(transaction.getId());
             if (t.isPresent()){
@@ -44,23 +44,25 @@ public class TransactionService {
         }else{
             if(cashier.getAvailable() && transaction.getAmount()>0) {
                 try {
+                    transaction = new Transaction(client,cashier, null, LocalDateTime.now(),LocalDateTime.now().plusMinutes(10),
+                            transaction.getAmount(),transaction.getType(), false);
+                    transaction = transactionRepository.save(transaction);
                     String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId();
                     String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                    transaction = new Transaction(client,cashier,qrCode, LocalDateTime.now(),LocalDateTime.now().plusMinutes(2),
-                            transaction.getAmount(),transaction.getType());
+                    transaction.setSecutityCode(qrCode);
+                    transaction = transactionRepository.save(transaction);
                 } catch (WriterException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                transaction = transactionRepository.save(transaction);
             }
             else {
                 throw new RecordNotFoundException("The cashier is not available.",-1);
             }
         }
         dto.setId(transaction.getId());
-        dto.setClient(transaction.getCashier().getId());
+        dto.setClient(transaction.getClient().getId());
         dto.setCashier(transaction.getCashier().getId());
         dto.setSecurityCode(transaction.getSecutityCode());
         dto.setType(transaction.getType());
@@ -91,36 +93,47 @@ public class TransactionService {
     }
 
     public TransactionResponseDTO getTransactionStatus(TransactionRequestDTO requestDTO) {
-        TransactionResponseDTO responseDTO = null;
         String status = "Data error, transaction data does not match.";
         Double amount = Double.valueOf(0);
-        String[] info = DataExtract.QRDataText(requestDTO.getSecurityCode());
+        String[] info = null;
+        try {
+            info = DataExtract.QRDataText(QRGenerator.decodeQRCode(requestDTO.getSecurityCode()));
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
         Client user = clientService.getClientById(Long.parseLong(info[0]));
         Cashier atm = cashierService.getCashierById(Long.parseLong(info[1]));
         Transaction transaction = this.getTransantionById(Long.parseLong(info[2]));
         if(transaction!=null && user!=null && atm!=null &&
                 transaction.getClient().getId()==user.getId() && transaction.getCashier().getId()==atm.getId()) {
-            if(transaction.getEnd_date().isAfter(LocalDateTime.now())) {
-                if (transaction.getType()) { //enter amount
-                    atm.setBalance(atm.getBalance() + transaction.getAmount());
-                    status="Transaction accepted.";
-                    amount=transaction.getAmount();
-                } else { //extract amount
-                    if (atm.getBalance() > 0 && atm.getBalance() - transaction.getAmount() >= 0) {
-                        atm.setBalance(atm.getBalance() - transaction.getAmount());
+            if(!transaction.getFinished()){
+                if(transaction.getEnd_date().isAfter(LocalDateTime.now())) {
+                    if (transaction.getType()) { //enter amount
+                        atm.setBalance(atm.getBalance() + transaction.getAmount());
                         status="Transaction accepted.";
-                        amount=transaction.getAmount()*-1;
-                    } else {
-                        status="Error, ATM does not have enough balance.";
+                        amount=transaction.getAmount();
+                    } else { //extract amount
+                        if (atm.getBalance() > 0 && atm.getBalance() - transaction.getAmount() >= 0) {
+                            atm.setBalance(atm.getBalance() - transaction.getAmount());
+                            status="Transaction accepted.";
+                            amount=transaction.getAmount()*-1;
+                        } else {
+                            status="Error, ATM does not have enough balance.";
+                        }
                     }
+                    cashierService.createOrUpdateCashier(atm);
+                    transaction.setFinished(true);
+                    transactionRepository.save(transaction);
+                }
+                else {
+                    status="Error, security code has expired.";
                 }
             }
             else {
-                status="Error, security code has expired.";
+                status="Error, the transaction has already been processed.";
             }
         }
-        responseDTO.setStatus(status);
-        responseDTO.setAmount(amount);
+        TransactionResponseDTO responseDTO = new TransactionResponseDTO(status, amount);
         return responseDTO;
     }
 }

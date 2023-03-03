@@ -1,9 +1,10 @@
 package bancaMach.backend.utils.QRGenerator;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
+
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javax.imageio.ImageIO;
@@ -12,9 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class QRGenerator {
 
@@ -45,4 +44,33 @@ public class QRGenerator {
         ImageIO.write(image, "PNG", new File(filePath));
     }
 
+    public static String decodeQRCode(String qrCodeString) throws NotFoundException {
+        MultiFormatReader reader = new MultiFormatReader();
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(toBufferedImage(qrCodeString))));
+        Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, Collections.singleton(BarcodeFormat.QR_CODE));
+        Result result = null;
+        try {
+            result = reader.decode(bitmap, hints);
+            return result.getText();
+        } catch (ReaderException e) {
+
+        }
+        return null;
+    }
+
+    private static BufferedImage toBufferedImage(String qrCodeString) {
+        // Este método convierte el String en un objeto BufferedImage, que es requerido por zxing
+        // La implementación depende de cómo fue convertido el QR code a String.
+        // Aquí se muestra un ejemplo simple para un QR code que fue convertido utilizando Base64:
+        try {
+            byte[] imageBytes = Base64.getDecoder().decode(qrCodeString);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes);
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+            return bufferedImage;
+        } catch (IOException e) {
+            throw new RuntimeException("No se pudo convertir el código QR a BufferedImage", e);
+        }
+    }
 }
