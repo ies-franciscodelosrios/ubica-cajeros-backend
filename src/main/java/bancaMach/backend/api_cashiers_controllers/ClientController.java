@@ -1,10 +1,12 @@
-package bancaMach.backend.api_cashier_clients;
+package bancaMach.backend.api_cashiers_controllers;
 
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_services.ClientService;
-import bancaMach.backend.data_validation.DNIValidator;
-import bancaMach.backend.data_validation.RegexValidator;
+import bancaMach.backend.utils.data_validation.DNIValidator;
+import bancaMach.backend.utils.data_validation.RegexValidator;
+import bancaMarch.clientFeign.user.UserFeignClient;
+import bancaMarch.dto.users.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +26,7 @@ import java.util.List;
 public class ClientController {
 
     private ClientService clientService;
+    private UserFeignClient feignClient;
 
     @Autowired
     public ClientController(ClientService clientService){
@@ -37,8 +40,8 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Clients not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Clients not found", content = @Content)
     })
-    public ResponseEntity<List<Client>> getAllClients(){
-        List<Client> result = clientService.getAllClients();
+    public ResponseEntity<List<UserDTO>> getAllClients(){
+        List<UserDTO> result = feignClient.getAllClients();
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
     }
 
