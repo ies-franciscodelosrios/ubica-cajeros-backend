@@ -3,6 +3,7 @@ package bancaMach.backend.api_cashier_services;
 import bancaMach.backend.api_cahier_repositories.ClientRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
+import bancaMach.backend.utils.QRGenerator.QRGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,13 @@ public class ClientService {
         if (c.getId() != null) {
             Optional<Client> client = clientRepository.findById(c.getId());
             if (client.isPresent()) {
+                c.setPassword(QRGenerator.sha256(c.getPassword()));
                 c = clientRepository.save(c);
             } else {
                 throw new RecordNotFoundException("Client not found.", c);
             }
         } else {
+            c.setPassword(QRGenerator.sha256(c.getPassword()));
             c = clientRepository.save(c);
         }
         return c;
