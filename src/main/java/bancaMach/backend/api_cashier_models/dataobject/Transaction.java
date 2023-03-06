@@ -27,7 +27,7 @@ public class Transaction implements Serializable {
     private Cashier cashier;
 
     @Column(name = "security_code")
-    private String secutityCode;
+    private String securityCode;
 
     @Column(name = "init_timedate")
     private LocalDateTime init_date;
@@ -44,12 +44,12 @@ public class Transaction implements Serializable {
     @Column(name = "finished")
     private Boolean finished;
 
-    public Transaction(Long id, Client client, Cashier cashier, String  secutityCode, LocalDateTime init_date,
+    public Transaction(Long id, Client client, Cashier cashier, String securityCode, LocalDateTime init_date,
                        LocalDateTime end_date, Double amount, Boolean type, Boolean finished) {
         this.id = id;
         this.client = client;
         this.cashier = cashier;
-        this.secutityCode = secutityCode;
+        this.securityCode = securityCode;
         this.init_date = init_date;
         this.end_date = end_date;
         this.amount = amount;
@@ -57,11 +57,11 @@ public class Transaction implements Serializable {
         this.finished = finished;
     }
 
-    public Transaction(Client client, Cashier cashier, String secutityCode, LocalDateTime init_date,
+    public Transaction(Client client, Cashier cashier, String securityCode, LocalDateTime init_date,
                        LocalDateTime end_date, Double amount, Boolean type, Boolean finished) {
         this.client = client;
         this.cashier = cashier;
-        this.secutityCode = secutityCode;
+        this.securityCode = securityCode;
         this.init_date = init_date;
         this.end_date = end_date;
         this.amount = amount;
@@ -95,12 +95,12 @@ public class Transaction implements Serializable {
         this.cashier = cashier;
     }
 
-    public String getSecutityCode() {
-        return secutityCode;
+    public String getSecurityCode() {
+        return securityCode;
     }
 
-    public void setSecutityCode(String secutityCode) {
-        this.secutityCode = secutityCode;
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
     }
 
     public LocalDateTime getInit_date() {
