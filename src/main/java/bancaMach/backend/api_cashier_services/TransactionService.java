@@ -47,7 +47,7 @@ public class TransactionService {
                     transaction = new Transaction(client,cashier, null, LocalDateTime.now(),LocalDateTime.now().plusMinutes(10),
                             transaction.getAmount(),transaction.getType(), false);
                     transaction = transactionRepository.save(transaction);
-                    String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId();
+                    String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId()+"_"+transaction.getInit_date();
                     String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
                     transaction.setSecurityCode(qrCode);
                     transaction = transactionRepository.save(transaction);
@@ -64,7 +64,7 @@ public class TransactionService {
         dto.setId(transaction.getId());
         dto.setClient(transaction.getClient().getId());
         dto.setCashier(transaction.getCashier().getId());
-        dto.setSecurityCode(transaction.getSecurityCode());
+        dto.setSecurityCode(QRGenerator.sha256(transaction.getSecurityCode()));
         dto.setType(transaction.getType());
         dto.setAmount(transaction.getAmount());
         dto.setInit_date(transaction.getInit_date());
