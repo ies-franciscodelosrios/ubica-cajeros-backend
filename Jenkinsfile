@@ -1,28 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage ('ACONTROL-FRONT: Download angular dependencies : npm install') {
+        stage ('BancaMarchBACK: Build project: ') {
             steps {
-                script{
-                    sh 'rm -rf node_modules'
-                    sh 'npm install'
-                }
+                sh 'mvn --batch-mode clean package -U -P${mavenProfile} -Dspring.profiles.active=${springProfile} -Dmaven.test.skip=true'
             }
         }
 
-        stage ('ACONTROL-FRONT: Build project: ng b -c des') {
+        stage ('BancaMarchBACK: Move to tomcat') {
             steps {
-                script{
-                    sh 'ng b -c des --aot'
-                }                
-            }
-        }
-
-        stage ('ACONTROL-FRONT: Deploying in nginx') {
-            steps {
-                script{
-                    sh 'cd dist && cp -vr . /usr/share/nginx/www/public'
-                }                
+                sh 'cd dist && cp -vr . /var/www/vps-3fdb8b00.vps.ovh.net'
             }
         }
     }
