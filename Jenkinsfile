@@ -7,9 +7,9 @@ pipeline {
             }
         }
 
-        stage ('BancaMarchBACK: Move to tomcat') {
+        stage ('BancaMarchBACK: Move and deploy on tomcat') {
             steps {
-                sh 'cd dist && cp -vr . /var/www/vps-3fdb8b00.vps.ovh.net'
+                sh 'cd target && cp -vr . /var/lib/tomcat9/webapps/ROOT'
             }
         }
     }
