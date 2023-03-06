@@ -49,7 +49,7 @@ public class TransactionService {
                     transaction = transactionRepository.save(transaction);
                     String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId();
                     String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                    transaction.setSecutityCode(qrCode);
+                    transaction.setSecurityCode(qrCode);
                     transaction = transactionRepository.save(transaction);
                 } catch (WriterException e) {
                     throw new RuntimeException(e);
@@ -64,7 +64,7 @@ public class TransactionService {
         dto.setId(transaction.getId());
         dto.setClient(transaction.getClient().getId());
         dto.setCashier(transaction.getCashier().getId());
-        dto.setSecurityCode(transaction.getSecutityCode());
+        dto.setSecurityCode(transaction.getSecurityCode());
         dto.setType(transaction.getType());
         dto.setAmount(transaction.getAmount());
         dto.setInit_date(transaction.getInit_date());
