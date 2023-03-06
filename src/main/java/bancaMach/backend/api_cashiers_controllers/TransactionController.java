@@ -74,8 +74,13 @@ public class TransactionController {
         return new ResponseEntity<>(transaction,new HttpHeaders(), HttpStatus.OK);
     }
 
-
     @PostMapping("/transactions/status")
+    @Operation(summary = "Return the status of transaccion and resolve it if all data is right")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transaction found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class))}),
+            @ApiResponse(responseCode = "400", description = "Transaction not valid", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Transaction's Id not found", content = @Content)
+    })
     public ResponseEntity<TransactionResponseDTO> getTransactionStatus(@RequestBody TransactionRequestDTO requestDTO){
         TransactionResponseDTO responseDTO = transactionService.getTransactionStatus(requestDTO);
         return new ResponseEntity<>(responseDTO, new HttpHeaders(), HttpStatus.OK);
