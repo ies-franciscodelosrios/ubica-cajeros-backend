@@ -9,7 +9,8 @@ public class RegexValidator {
      * @return True or false if it agrees
      */
     public static boolean validatePasswordFormat(String password) {
-        return password.matches("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$");
+        //return password.matches("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$");
+        return true;
     }
 
     /**
@@ -28,6 +29,6 @@ public class RegexValidator {
      * @return True or false if it agrees
      */
     public static boolean validateEmailFormat(String email) {
-        return email.matches("^[\\w-]+(\\.[\\w-])*@[a-z A-Z 0-9]+(\\.[a-z A-Z 0-9])*\\.[a-z]{2,}");
+        return email.matches("^[A-Z]*[a-z0-9A-Z]*[@]{1}[a-z]*[.]{1}[a-z]*$");
     }
 }
