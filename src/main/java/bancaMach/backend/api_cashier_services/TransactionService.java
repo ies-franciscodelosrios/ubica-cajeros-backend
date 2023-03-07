@@ -49,7 +49,7 @@ public class TransactionService {
                     transaction = transactionRepository.save(transaction);
                     String codeText = transaction.getClient().getId()+"_"+transaction.getCashier().getId()+"_"+transaction.getId()+"_"+transaction.getInit_date();
                     String qrCode = QRGenerator.generateQRCodeImageAsBase64(codeText,300,300);
-                    transaction.setSecurityCode(qrCode);
+                    transaction.setSecurityCode(QRGenerator.sha256(qrCode));
                     transaction = transactionRepository.save(transaction);
                 } catch (WriterException e) {
                     throw new RuntimeException(e);
@@ -64,7 +64,7 @@ public class TransactionService {
         dto.setId(transaction.getId());
         dto.setClient(transaction.getClient().getId());
         dto.setCashier(transaction.getCashier().getId());
-        dto.setSecurityCode(QRGenerator.sha256(transaction.getSecurityCode()));
+        dto.setSecurityCode(transaction.getSecurityCode());
         dto.setType(transaction.getType());
         dto.setAmount(transaction.getAmount());
         dto.setInit_date(transaction.getInit_date());
@@ -95,15 +95,24 @@ public class TransactionService {
     public TransactionResponseDTO getTransactionStatus(TransactionRequestDTO requestDTO) {
         String status = "Data error, transaction data does not match.";
         Double amount = Double.valueOf(0);
+
+        /*
         String[] info = null;
         try {
             info = DataExtract.QRDataText(QRGenerator.decodeQRCode(requestDTO.getSecurityCode()));
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
-        Client user = clientService.getClientById(Long.parseLong(info[0]));
-        Cashier atm = cashierService.getCashierById(Long.parseLong(info[1]));
-        Transaction transaction = this.getTransantionById(Long.parseLong(info[2]));
+        */
+
+        Transaction transaction = transactionRepository.getTransactionByCode(requestDTO.getSecurityCode());
+        Client user = null;
+        Cashier atm = null;
+        if(transaction!=null){
+            user = clientService.getClientById(transaction.getClient().getId());
+            atm = cashierService.getCashierById(transaction.getCashier().getId());
+        }
+
         if(transaction!=null && user!=null && atm!=null &&
                 transaction.getClient().getId()==user.getId() && transaction.getCashier().getId()==atm.getId()) {
             if(!transaction.getFinished()){
