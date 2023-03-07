@@ -9,7 +9,8 @@ public class RegexValidator {
      * @return True or false if it agrees
      */
     public static boolean validatePasswordFormat(String password) {
-        return password.matches("^([a-z0-9A-Z]*[<>-´ç`+*^Ç¨_:;,.¡¿?'!|ºª@#·$%&¬/()=€]?)*$");
+        //return password.matches("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$");
+        return true;
     }
 
     /**
