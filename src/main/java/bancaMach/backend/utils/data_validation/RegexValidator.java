@@ -9,8 +9,7 @@ public class RegexValidator {
      * @return True or false if it agrees
      */
     public static boolean validatePasswordFormat(String password) {
-        //return password.matches("^(?=.[a-z])(?=.[A-Z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$");
-        return true;
+        return password.matches("^([a-z0-9A-Z]*[<>-´ç`+*^Ç¨_:;,.¡¿?'!|ºª@#·$%&¬/()=\\[\\]{}€]?)*$");
     }
 
     /**
@@ -30,5 +29,14 @@ public class RegexValidator {
      */
     public static boolean validateEmailFormat(String email) {
         return email.matches("^[A-Z]*[a-z0-9A-Z]*[@]{1}[a-z]*[.]{1}[a-z]*$");
+    }
+
+    /**
+     * Validate account format
+     * @param account Account
+     * @return True or false if matches
+     */
+    public static boolean validateAccountFormat(String account) {
+        return account.matches("^ES\\d{2}\\s\\d{4}\\s\\d{4}\\s\\d{4}\\s\\d{4}\\s\\d{4}$");
     }
 }
