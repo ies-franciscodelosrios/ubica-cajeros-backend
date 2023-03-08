@@ -4,7 +4,7 @@ public class RegexValidator {
 
     /**
      * Validate password format.
-     * Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number, and one special character.
+     * Password that at least one uppercase letter, one lowercase letter, one number, and one special character.
      * @param password Password
      * @return True or false if it agrees
      */
