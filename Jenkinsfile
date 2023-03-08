@@ -1,12 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage ('BancaMarchBACK: Import Database') {
-                    steps {
-                        sh 'mv bancaMarchDB_07_03_23.sql /var/lib/postgresql'
-                        sh 'sudo -u postgres psql postgres < bancaMarchDB_07_03_23.sql'
-            }
-        }
         stage ('BancaMarchBACK: Clone DTOs and Openfeign repositories and install dependencies on BaseProyect') {
             steps {
                 sh 'rm -rf ubica-cajeros-DTO'
