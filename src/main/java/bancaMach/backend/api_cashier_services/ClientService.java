@@ -4,6 +4,8 @@ import bancaMach.backend.api_cahier_repositories.ClientRepository;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
+import bancaMach.backend.utils.data_validation.DNIValidator;
+import bancaMach.backend.utils.data_validation.RegexValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,21 @@ public class ClientService {
      * @param c
      */
     public Client createOrUpdateClient(Client c) {
-        if (c.getId() != null) {
-            Optional<Client> client = clientRepository.findById(c.getId());
-            if (client.isPresent()) {
+        if(DNIValidator.DNIValidator(c.getDni()) &&
+                RegexValidator.validatePasswordFormat(c.getPassword()) &&
+                RegexValidator.validateAccountFormat(c.getAccount())){
+            if (c.getId() != null) {
+                Optional<Client> client = clientRepository.findById(c.getId());
+                if (client.isPresent()) {
+                    c.setPassword(QRGenerator.sha256(c.getPassword()));
+                    c = clientRepository.save(c);
+                } else {
+                    throw new RecordNotFoundException("Client not found.", c);
+                }
+            } else {
                 c.setPassword(QRGenerator.sha256(c.getPassword()));
                 c = clientRepository.save(c);
-            } else {
-                throw new RecordNotFoundException("Client not found.", c);
             }
-        } else {
-            c.setPassword(QRGenerator.sha256(c.getPassword()));
-            c = clientRepository.save(c);
         }
         return c;
     }
@@ -67,12 +73,15 @@ public class ClientService {
      * @return
      */
     public Client getClientByDNI(String dni) {
-       Optional<Client> client = clientRepository.getClientByDNI(dni);
-        if (client.isPresent()) {
-            return client.get();
-        } else {
-            throw new RecordNotFoundException("Client not found.", dni);
+        if(DNIValidator.DNIValidator(dni)){
+            Optional<Client> client = clientRepository.getClientByDNI(dni);
+            if (client.isPresent()) {
+                return client.get();
+            } else {
+                throw new RecordNotFoundException("Client not found.", dni);
+            }
         }
+        return null;
     }
 
     /**
