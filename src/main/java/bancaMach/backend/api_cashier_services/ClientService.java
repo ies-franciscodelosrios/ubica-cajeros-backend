@@ -23,6 +23,9 @@ public class ClientService {
      * @param c
      */
     public Client createOrUpdateClient(Client c) {
+
+        System.out.println(c);
+
         if(DNIValidator.DNIValidator(c.getDni()) &&
                 RegexValidator.validatePasswordFormat(c.getPassword()) &&
                 RegexValidator.validateAccountFormat(c.getAccount())){
@@ -77,8 +80,6 @@ public class ClientService {
             Optional<Client> client = clientRepository.getClientByDNI(dni);
             if (client.isPresent()) {
                 return client.get();
-            } else {
-                throw new RecordNotFoundException("Client not found.", dni);
             }
         }
         return null;

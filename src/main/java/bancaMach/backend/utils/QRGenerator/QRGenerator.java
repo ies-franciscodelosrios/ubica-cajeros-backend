@@ -45,15 +45,18 @@ public class QRGenerator {
      * @return devuelve la cadena transformada
      */
     public static String sha256(String s)  {
-        String msg = "";
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(s.getBytes(StandardCharsets.UTF_8));
-            msg = toHexString(hash);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            md.update(s.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte aByte : md.digest()) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            s = sb.toString();
+        }catch(Exception e){
+            throw new RuntimeException(e);
         }
-        return msg;
+        return s;
     }
 
     /**
