@@ -74,7 +74,6 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Client not created", content = @Content),
     })
     public ResponseEntity<Client> createClient(@RequestBody Client client) throws RecordNotFoundException{
-        System.out.println(client);
         Client clientCreated = clientService.createOrUpdateClient(client);
         return new ResponseEntity<>(clientCreated, new HttpHeaders(), HttpStatus.OK);
     }
