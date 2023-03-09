@@ -93,16 +93,6 @@ public class TransactionService {
     public TransactionResponseDTO getTransactionStatus(TransactionRequestDTO requestDTO) {
         String status = "Data error, transaction data does not match.";
         Double amount = Double.valueOf(0);
-
-        /*
-        String[] info = null;
-        try {
-            info = DataExtract.QRDataText(QRGenerator.decodeQRCode(requestDTO.getSecurityCode()));
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        */
-
         Transaction transaction = transactionRepository.getTransactionByCode(requestDTO.getSecurityCode());
         Client user = null;
         Cashier atm = null;
@@ -110,9 +100,8 @@ public class TransactionService {
             user = clientService.getClientById(transaction.getClient().getId());
             atm = cashierService.getCashierById(transaction.getCashier().getId());
         }
-
         if(transaction!=null && user!=null && atm!=null &&
-                transaction.getClient().getId()==user.getId() && transaction.getCashier().getId()==atm.getId()) {
+                transaction.getClient().getId()==user.getId() && transaction.getCashier().getId()==requestDTO.getAtmId()) {
             if(!transaction.getFinished()){
                 if(transaction.getEnd_date().isAfter(LocalDateTime.now())) {
                     if (transaction.getType()) { //enter amount
