@@ -8,7 +8,7 @@ pipeline {
         }
         stage ('BancaMarchBACK: Move and deploy on tomcat') {
             steps {
-                sh 'cd target && mv ./ubica-cajeros-backend/bancaMachBackend-1.0-SNAPSHOT.war /opt/tomcat/webapps/'
+                sh 'cd target && mv ./target/bancaMachBackend-1.0-SNAPSHOT.war /opt/tomcat/webapps/'
                 sh 'java -jar bancaMachBackend-1.0-SNAPSHOT.war'
             }
         }
