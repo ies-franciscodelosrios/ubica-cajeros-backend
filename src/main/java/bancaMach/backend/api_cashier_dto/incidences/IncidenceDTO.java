@@ -1,4 +1,4 @@
-package bancaMach.backend.dto.incidences;
+package bancaMach.backend.api_cashier_dto.incidences;
 
 import java.io.Serializable;
 

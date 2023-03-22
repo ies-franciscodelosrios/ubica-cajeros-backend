@@ -1,8 +1,8 @@
-package bancaMach.backend.dto.atm;
+package bancaMach.backend.api_cashier_dto.atm;
 
 import java.io.Serializable;
 
-public class AtmDAO implements Serializable {
+public class AtmDTO implements Serializable {
 
     private static final long serialVersion = 1L;
 
@@ -11,10 +11,10 @@ public class AtmDAO implements Serializable {
     private Double lng;
     private Integer distance;
 
-    public AtmDAO() {
+    public AtmDTO() {
     }
 
-    public AtmDAO(Long user, Double lat, Double lng, Integer distance) {
+    public AtmDTO(Long user, Double lat, Double lng, Integer distance) {
         this.user = user;
         this.lat = lat;
         this.lng = lng;

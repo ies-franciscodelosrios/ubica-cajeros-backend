@@ -1,4 +1,4 @@
-package bancaMach.backend.dto.users;
+package bancaMach.backend.api_cashier_dto.users;
 
 import java.io.Serializable;
 
