@@ -3,8 +3,6 @@ package bancaMach.backend.api_cashiers_controllers;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_services.ClientService;
-import bancaMach.backend.utils.data_validation.DNIValidator;
-import bancaMach.backend.utils.data_validation.RegexValidator;
 import bancaMarch.clientFeign.user.UserFeignClient;
 import bancaMarch.dto.users.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,16 +60,10 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Client found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
             @ApiResponse(responseCode = "400", description = "Client not valid", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
+            @ApiResponse(responseCode = "404", description = "Client's DNI not found", content = @Content)
     })
     public ResponseEntity<Client> getClientByDNI(@PathVariable("dni") String dni) throws RecordNotFoundException{
-        Client client = null;
-        if(DNIValidator.DNIValidator(dni)){
-            client = clientService.getClientByDNI(dni);
-        }
-        else {
-            throw new RecordNotFoundException("Invalid dni.",-1);
-        }
+        Client client = clientService.getClientByDNI(dni);
         return new ResponseEntity<>(client, new HttpHeaders(), HttpStatus.OK);
     }
 
@@ -82,13 +74,7 @@ public class ClientController {
             @ApiResponse(responseCode = "400", description = "Client not created", content = @Content),
     })
     public ResponseEntity<Client> createClient(@RequestBody Client client) throws RecordNotFoundException{
-        Client clientCreated = null;
-        if(DNIValidator.DNIValidator(client.getDni()) && RegexValidator.validatePasswordFormat(client.getPassword())){
-            clientCreated = clientService.createOrUpdateClient(client);
-        }
-        else {
-            throw new RecordNotFoundException("Incorrect registry data.",-1);
-        }
+        Client clientCreated = clientService.createOrUpdateClient(client);
         return new ResponseEntity<>(clientCreated, new HttpHeaders(), HttpStatus.OK);
     }
 
