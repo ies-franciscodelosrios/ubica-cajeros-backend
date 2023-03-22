@@ -1,6 +1,22 @@
 pipeline {
     agent any
     stages {
+        stage ('BancaMarchBACK: Build project') {
+            steps {
+                sh 'mvn --batch-mode clean package -U -Dmaven.test.skip=true'
+            }
+        }
+        stage ('BancaMarchBACK: Move and deploy on tomcat') {
+            steps {
+                sh 'cd target && mv ./ubica-cajeros-backend/bancaMachBackend-1.0-SNAPSHOT.war /opt/tomcat/webapps/'
+                sh 'java -jar bancaMachBackend-1.0-SNAPSHOT.war'
+            }
+        }
+    }
+}
+/*pipeline {
+    agent any
+    stages {
         stage ('BancaMarchBACK: Clone DTOs and Openfeign repositories and install dependencies on BaseProyect') {
             steps {
                 sh 'rm -rf ubica-cajeros-DTO'
@@ -27,7 +43,7 @@ pipeline {
     }
 }
 
-/*JENKINS
+JENKINS
 pipeline {
     agent any
     stages {

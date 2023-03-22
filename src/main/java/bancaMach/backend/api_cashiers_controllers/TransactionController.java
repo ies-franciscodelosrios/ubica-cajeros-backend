@@ -1,13 +1,13 @@
 package bancaMach.backend.api_cashiers_controllers;
 
+import bancaMach.backend.api_cashier_dto.transactions.TransactionDTO;
+import bancaMach.backend.api_cashier_dto.transactions.TransactionRequestDTO;
+import bancaMach.backend.api_cashier_dto.transactions.TransactionResponseDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.TransactionService;
-import bancaMarch.dto.transactions.TransactionRequestDTO;
-import bancaMarch.dto.transactions.TransactionDTO;
-import bancaMarch.dto.transactions.TransactionResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

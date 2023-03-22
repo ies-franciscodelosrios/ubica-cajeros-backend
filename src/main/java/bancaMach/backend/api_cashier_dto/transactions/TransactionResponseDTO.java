@@ -1,4 +1,4 @@
-package bancaMach.backend.dto.transactions;
+package bancaMach.backend.api_cashier_dto.transactions;
 
 import java.io.Serializable;
 

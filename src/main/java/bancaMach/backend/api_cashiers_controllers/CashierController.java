@@ -1,10 +1,10 @@
 package bancaMach.backend.api_cashiers_controllers;
 
+import bancaMach.backend.api_cashier_dto.atm.AtmDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
-import bancaMarch.dto.atm.AtmDAO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class CashierController {
             @ApiResponse(responseCode = "400", description = "Cashier not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
     })
-    public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody AtmDAO georeq) {
+    public ResponseEntity<List<Cashier>> getAllCashiersByLoc(@RequestBody AtmDTO georeq) {
         List<Cashier> result = cashierService.getAllCashiersByLoc(georeq.getLat(), georeq.getLng());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
@@ -120,7 +121,7 @@ public class CashierController {
             @ApiResponse(responseCode = "400", description = "Cashiers not valid", content = @Content),
             @ApiResponse(responseCode = "404", description = "Cashier's Postcode not found", content = @Content)
     })
-    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody AtmDAO cashierRequest){
+    public ResponseEntity<List<Cashier>> getAllCashiersByDistance(@RequestBody AtmDTO cashierRequest){
         List<Cashier> result = cashierService.getAllCashiersByDistance(cashierRequest.getLat(), cashierRequest.getLng(), cashierRequest.getDistance());
         setCoordenates(result);
         return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);

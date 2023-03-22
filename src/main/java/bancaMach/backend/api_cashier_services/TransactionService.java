@@ -1,14 +1,14 @@
 package bancaMach.backend.api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.TransactionRepository;
+import bancaMach.backend.api_cashier_dto.transactions.TransactionDTO;
+import bancaMach.backend.api_cashier_dto.transactions.TransactionRequestDTO;
+import bancaMach.backend.api_cashier_dto.transactions.TransactionResponseDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
-import bancaMarch.dto.transactions.TransactionDTO;
-import bancaMarch.dto.transactions.TransactionRequestDTO;
-import bancaMarch.dto.transactions.TransactionResponseDTO;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package bancaMach.backend.api_cashiers_controllers;
 
+import bancaMach.backend.api_cashier_dto.incidences.IncidenceDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
@@ -7,7 +8,6 @@ import bancaMach.backend.api_cashier_models.dataobject.Incidence;
 import bancaMach.backend.api_cashier_services.CashierService;
 import bancaMach.backend.api_cashier_services.ClientService;
 import bancaMach.backend.api_cashier_services.IncidenceService;
-import bancaMarch.dto.incidences.IncidenceDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
