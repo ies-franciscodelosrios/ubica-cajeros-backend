@@ -1,5 +1,7 @@
 package bancaMach.backend.api_cashiers_controllers;
 
+import bancaMach.backend.api_cashier_dto.users.RequestPasswordDTO;
+import bancaMach.backend.api_cashier_dto.users.ResponsePasswordDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.api_cashier_services.ClientService;
@@ -86,6 +88,20 @@ public class ClientController {
         client.setId(id);
         client = clientService.createOrUpdateClient(client);
         return new ResponseEntity<>(client, new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @PutMapping("/client/{dni}")
+    @Operation(summary = "Edits the client information by his dni")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Client edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+            @ApiResponse(responseCode = "400", description = "Client not edited", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
+    })
+    public ResponseEntity<ResponsePasswordDTO> updatePasswordClient(@RequestBody RequestPasswordDTO requestPasswordDTO, @PathVariable("dni") String dni) throws RecordNotFoundException{
+        ResponsePasswordDTO responsePasswordDTO;
+        requestPasswordDTO.setDni(dni);
+        responsePasswordDTO = clientService.updateClientPassword(requestPasswordDTO);
+        return new ResponseEntity<>(responsePasswordDTO, new HttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("/client/{id}")
