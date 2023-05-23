@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class Main extends SpringBootServletInitializer {
@@ -25,7 +27,7 @@ public class Main extends SpringBootServletInitializer {
         return new JtsModule();
     }
 
-    /*
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -35,5 +37,5 @@ public class Main extends SpringBootServletInitializer {
             }
         };
     }
-     */
+
 }
