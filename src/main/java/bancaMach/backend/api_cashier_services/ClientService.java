@@ -26,18 +26,19 @@ public class ClientService {
      * @param c
      */
     public Client createOrUpdateClient(Client c) {
+        Optional<Client> client = null;
         if(DNIValidator.DNIValidator(c.getDni()) &&
                 RegexValidator.validatePasswordFormat(c.getPassword()) &&
                 RegexValidator.validateAccountFormat(c.getAccount())){
-            if (c.getId() != null) {
-                Optional<Client> client = clientRepository.findById(c.getId());
-                if (client.isPresent()) {
+            client = clientRepository.getClientByDNI(c.getDni());
+            if (c.getId() != null && client.get().getId() == c.getId()) {
+                if (client.get().getDni() != c.getDni()) {
                     c.setPassword(QRGenerator.sha256(c.getPassword()));
                     c = clientRepository.save(c);
                 } else {
                     throw new RecordNotFoundException("Client not found.", c);
                 }
-            } else {
+            } else if (!client.isPresent()){
                 c.setPassword(QRGenerator.sha256(c.getPassword()));
                 c = clientRepository.save(c);
             }

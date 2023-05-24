@@ -46,4 +46,18 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
                     "ORDER BY position;",
             nativeQuery = true)
     List<Cashier> getAllCashiersByAddress(@Param(value="address")String address);
+
+    //Query Update para actualizar imagen de cajero
+    //Codifica la imagen en base64
+    //UPDATE cashier
+    //SET photo =	encode(pg_read_binary_file('c:\Proyecto_cajeros\ATM-4.jpg'),'base64')
+    //WHERE id = 4;
+
+    //Insert cashier Opción 1
+    //INSERT INTO cashier (position)
+    // VALUES (ST_GeographyFromText('POINT(37.8851372511271 -4.779386997689956)'));
+
+    //Insert cashier Opción 2
+    //insert into cashier (position)
+    //values (ST_SetSRID(ST_Makepoint(37.66327965715871, -4.71348241385191),4326));
 }
