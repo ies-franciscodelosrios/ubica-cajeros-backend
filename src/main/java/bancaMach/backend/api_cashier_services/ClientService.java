@@ -1,9 +1,12 @@
 package bancaMach.backend.api_cashier_services;
 
 import bancaMach.backend.api_cahier_repositories.ClientRepository;
+import bancaMach.backend.api_cashier_dto.users.RequestPasswordDTO;
+import bancaMach.backend.api_cashier_dto.users.ResponsePasswordDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
+import bancaMach.backend.utils.data_update.PasswordGenerator;
 import bancaMach.backend.utils.data_validation.DNIValidator;
 import bancaMach.backend.utils.data_validation.RegexValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,36 @@ public class ClientService {
             }
         }
         return c;
+    }
+
+    /**
+     * Method that creates or updates a client password
+     * @param requestPasswordDTO
+     */
+    public ResponsePasswordDTO updateClientPassword(RequestPasswordDTO requestPasswordDTO) {
+        Client c = null;
+        ResponsePasswordDTO responsePasswordDTO = new ResponsePasswordDTO();
+        if (requestPasswordDTO.getDni() != null) {
+            if(DNIValidator.DNIValidator(requestPasswordDTO.getDni())){
+                Optional<Client> client = clientRepository.getClientByDNI(requestPasswordDTO.getDni());
+                 c = client.get();
+                    if (requestPasswordDTO.getEmail() == c.getEmail()) {
+                        c.setPassword(PasswordGenerator.generatePassword());
+                        //Enviar la nueva contraseña al email del cliente por su dni
+
+                        c = clientRepository.save(c);
+                    }else{
+                        responsePasswordDTO.setCode("Error, el email del cliente no existe en la base de datos");
+                    }
+            } else {
+                responsePasswordDTO.setCode("Error, el DNI del cliente no es válido por su formato");
+                c.setPassword(QRGenerator.sha256(c.getPassword()));
+                c = clientRepository.save(c);
+            }
+        }else{
+            responsePasswordDTO.setCode("Error, el DNI del cliente no existe");
+        }
+        return responsePasswordDTO;
     }
 
     /**
