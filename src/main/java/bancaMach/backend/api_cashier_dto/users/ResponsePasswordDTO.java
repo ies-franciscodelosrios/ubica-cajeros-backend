@@ -5,18 +5,18 @@ import java.io.Serializable;
 public class ResponsePasswordDTO implements Serializable {
 
     private static final long serialVersion = 1L;
-    private String code;
+    private String responseMessage;
 
     public ResponsePasswordDTO() {
     }
-    public ResponsePasswordDTO(String code) {
-        this.code = code;
+    public ResponsePasswordDTO(String responseMessage) {
+        this.responseMessage = responseMessage;
     }
 
-    public String getCode() {
-        return code;
+    public String getResponseMessage() {
+        return responseMessage;
     }
-    public void setCode(String code) {
-        this.code = code;
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
     }
 }

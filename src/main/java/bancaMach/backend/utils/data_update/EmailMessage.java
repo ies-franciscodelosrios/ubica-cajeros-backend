@@ -1,45 +1,43 @@
 package bancaMach.backend.utils.data_update;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
-import com.sendgrid.helpers.mail.objects.Personalization;
+import bancaMach.backend.api_cashier_dto.users.RequestPasswordDTO;
 
-import java.io.IOException;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 public class EmailMessage {
-    public static void main(String[] args) {
-        String sendGridApiKey = "TU_API_KEY_DE_SENDGRID";
+    public boolean sendPasswordFromMail(RequestPasswordDTO requestPasswordDTO, String password) {
+        String senderEmail = "juanma4x21@gmail.com";
+        String senderPassword = "zqmchrsusfcluyyy";
 
-        Email fromEmail = new Email("tucorreo@gmail.com");
-        Email toEmail = new Email("destinatario@gmail.com");
-        Content content = new Content("text/plain", "Hola, esto es un correo de prueba.");
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        Mail mail = new Mail();
-        mail.setFrom(fromEmail);
-        mail.setSubject("Correo de prueba");
-        mail.addContent(content);
-
-        Personalization personalization = new Personalization();
-        personalization.addTo(toEmail);
-        mail.addPersonalization(personalization);
-
-        SendGrid sendGrid = new SendGrid(sendGridApiKey);
-        Request request = new Request();
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(senderEmail, senderPassword);
+            }
+        });
 
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(senderEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(requestPasswordDTO.getEmail()));
+            message.setSubject(requestPasswordDTO.getSubject());
+            message.setText(requestPasswordDTO.getMessage()+password);
 
-            sendGrid.api(request);
-            System.out.println("Correo enviado con éxito.");
-        } catch (IOException e) {
+            Transport.send(message);
+            return true;
+
+        } catch (MessagingException e) {
             e.printStackTrace();
-            System.out.println("Error al enviar el correo.");
+            return false;
+
         }
     }
 }
