@@ -29,6 +29,9 @@ public class Client implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "admin")
+    private boolean admin;
+
     @JsonIgnore
     //@JsonManagedReference
     @OneToMany(mappedBy = "client")
@@ -70,6 +73,8 @@ public class Client implements Serializable {
     public void setAccount(String account) {
         this.account = account;
     }
+    public boolean isAdmin() { return admin; }
+    public void setAdmin(boolean admin) { this.admin = admin; }
     public List<Transaction> getTransactions() {
         return transactions;
     }
