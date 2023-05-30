@@ -37,6 +37,7 @@ public class ClientService {
                 }
             } else if (!client.isPresent()){
                 c.setPassword(QRGenerator.sha256(c.getPassword()));
+                c.setAdmin(false);
                 c = clientRepository.save(c);
             }
         }
