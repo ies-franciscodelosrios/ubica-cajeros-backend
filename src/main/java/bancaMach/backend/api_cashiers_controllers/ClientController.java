@@ -90,11 +90,11 @@ public class ClientController {
         return new ResponseEntity<>(client, new HttpHeaders(), HttpStatus.OK);
     }
 
-    @PutMapping("/client/{dni}")
-    @Operation(summary = "Edits the client information by his dni")
+    @PutMapping("/client/rp/{dni}")
+    @Operation(summary = "Edits the client password by his dni and send it to his email")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Client edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-            @ApiResponse(responseCode = "400", description = "Client not edited", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Client's password edited", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+            @ApiResponse(responseCode = "400", description = "Client's password not edited", content = @Content),
             @ApiResponse(responseCode = "404", description = "Client's Id not found", content = @Content)
     })
     public ResponseEntity<ResponsePasswordDTO> updatePasswordClient(@RequestBody RequestPasswordDTO requestPasswordDTO, @PathVariable("dni") String dni) throws RecordNotFoundException{

@@ -6,12 +6,14 @@ import bancaMach.backend.api_cashier_dto.users.ResponsePasswordDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Client;
 import bancaMach.backend.utils.QRGenerator.QRGenerator;
+import bancaMach.backend.utils.data_update.EmailMessage;
 import bancaMach.backend.utils.data_update.PasswordGenerator;
 import bancaMach.backend.utils.data_validation.DNIValidator;
 import bancaMach.backend.utils.data_validation.RegexValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.AuthenticationFailedException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,21 +59,25 @@ public class ClientService {
             if(DNIValidator.DNIValidator(requestPasswordDTO.getDni())){
                 Optional<Client> client = clientRepository.getClientByDNI(requestPasswordDTO.getDni());
                  c = client.get();
-                    if (requestPasswordDTO.getEmail() == c.getEmail()) {
-                        c.setPassword(PasswordGenerator.generatePassword());
-                        //Enviar la nueva contraseña al email del cliente por su dni
-
-                        c = clientRepository.save(c);
-                    }else{
-                        responsePasswordDTO.setCode("Error, el email del cliente no existe en la base de datos");
+                if (requestPasswordDTO.getEmail().equals(c.getEmail())) {
+                    c.setPassword(PasswordGenerator.generatePassword());
+                    EmailMessage eMessage = new EmailMessage();
+                        if (eMessage.sendPasswordFromMail(requestPasswordDTO, c.getPassword())) {
+                            c.setPassword(QRGenerator.sha256(c.getPassword()));
+                            c = clientRepository.save(c);
+                        } else {
+                            responsePasswordDTO.setResponseMessage("Error, el correo o la contraseña del destinatario no son correctos");
+                        }
+                }else{
+                        responsePasswordDTO.setResponseMessage("Error, el email del cliente no existe en la base de datos");
                     }
             } else {
-                responsePasswordDTO.setCode("Error, el DNI del cliente no es válido por su formato");
+                responsePasswordDTO.setResponseMessage("Error, el DNI del cliente no es válido por su formato");
                 c.setPassword(QRGenerator.sha256(c.getPassword()));
                 c = clientRepository.save(c);
             }
         }else{
-            responsePasswordDTO.setCode("Error, el DNI del cliente no existe");
+            responsePasswordDTO.setResponseMessage("Error, el DNI del cliente no existe");
         }
         return responsePasswordDTO;
     }
