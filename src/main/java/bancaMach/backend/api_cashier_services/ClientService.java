@@ -33,11 +33,13 @@ public class ClientService {
                 RegexValidator.validatePasswordFormat(c.getPassword()) &&
                 RegexValidator.validateAccountFormat(c.getAccount())){
             client = clientRepository.getClientByDNI(c.getDni());
-            if (c.getId() != null && client.get().getId() == c.getId()) {
+            if (c.getId() != null && client.get().getId().equals(c.getId())) {
                 if (client.get().getDni() != c.getDni()) {
                     c.setPassword(QRGenerator.sha256(c.getPassword()));
                     c = clientRepository.save(c);
                 } else {
+                    c.setPassword(QRGenerator.sha256(c.getPassword()));
+                    c = clientRepository.save(c);
                     throw new RecordNotFoundException("Client not found.", c);
                 }
             } else if (!client.isPresent()){
