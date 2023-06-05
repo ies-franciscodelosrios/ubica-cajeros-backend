@@ -1,5 +1,7 @@
 package bancaMach.backend.api_cashiers_controllers;
 
+import bancaMach.backend.api_cashier_dto.atm.ATMResponseDTO;
+import bancaMach.backend.api_cashier_dto.atm.ATMSaveDTO;
 import bancaMach.backend.api_cashier_dto.atm.AtmDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
@@ -189,5 +191,17 @@ public class CashierController {
             c.setLattitude(c.getPosition().getX());
             c.setLongitude(c.getPosition().getY());
         }
+    }
+
+    @PostMapping("/atm")
+    @Operation(summary = "Insert or update an ATM")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ATM created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Cashier.class))}),
+            @ApiResponse(responseCode = "400", description = "ATM not created", content = @Content),
+    })
+    public ResponseEntity<ATMResponseDTO> InsertOrUpdateATM(@RequestBody ATMSaveDTO atm){
+        ATMResponseDTO result = new ATMResponseDTO();
+        result.setResponse(cashierService.insertOrUpdateATM(atm));
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.CREATED);
     }
 }
