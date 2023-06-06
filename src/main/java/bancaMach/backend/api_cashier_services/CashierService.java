@@ -81,35 +81,37 @@ public class CashierService {
     }
 
     public int insertOrUpdateATM(ATMSaveDTO atm) {
-        //Update
-        if (atm.getId() != null && cashierRepository.findATM(atm.getId(), atm.getLattitude(), atm.getLongitude()).isPresent()) {
-            try {
-                if (atm.getPhoto() == null) {
-                    cashierRepository.updateWithoutPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                            atm.getLocality());
-                }
-                else {
-                    cashierRepository.updateWithPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                            atm.getLocality(), atm.getPhoto());
-                }
-                return 1;
-            } catch (Exception e) {
-                return 0;
-            }
-        }
-        else { //Insert
-            try {
-                if (atm.getPhoto() == null) {
-                    cashierRepository.saveWithoutPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                            atm.getLocality(), atm.getLattitude(), atm.getLongitude());
+        try {
+            //Update
+            if (atm.getId() != null) {
+                if (cashierRepository.findATMByIDAndPosition(atm.getId(), atm.getLattitude(), atm.getLongitude()).isPresent()) {
+                    if (atm.getPhoto() == null) {
+                        cashierRepository.updateWithoutPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality());
+                    } else {
+                        cashierRepository.updateWithPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality(), atm.getPhoto());
+                    }
+                    return 1;
                 } else {
-                    cashierRepository.saveWithPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                            atm.getLocality(), atm.getPhoto(), atm.getLattitude(), atm.getLongitude());
+                    return 0;
                 }
-                return 1;
-            } catch (Exception e) {
-                return 0;
+            } else { //Insert
+                if (!cashierRepository.findATMByPosition(atm.getLattitude(), atm.getLongitude()).isPresent()) {
+                    if (atm.getPhoto() == null) {
+                        cashierRepository.saveWithoutPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality(), atm.getLattitude(), atm.getLongitude());
+                    } else {
+                        cashierRepository.saveWithPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality(), atm.getPhoto(), atm.getLattitude(), atm.getLongitude());
+                    }
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
+        } catch (Exception e) {
+            return 0;
         }
     }
 }
