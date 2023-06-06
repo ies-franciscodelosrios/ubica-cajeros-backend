@@ -87,11 +87,25 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
 
     @Query(
             value = "SELECT * " +
-                    "FROM cashier AS c " +
-                    "WHERE c.id = :id and  c.position = ST_SetSRID(ST_Makepoint(:lat, :lon),4326) ;",
+                    "FROM cashier " +
+                    "WHERE :id IN " +
+                        "(SELECT id " +
+                        "FROM cashier " +
+                        "WHERE position = ST_SetSRID(ST_Makepoint(:lat, :lon),4326)) " +
+                    "AND id = :id ;",
             nativeQuery = true)
-    Optional<Cashier> findATM(
+    Optional<Cashier> findATMByIDAndPosition(
             @Param(value="id")long id,
+            @Param(value="lat")double lattiude,
+            @Param(value="lon")double longitude
+    );
+
+    @Query(
+            value = "SELECT * " +
+                    "FROM cashier " +
+                    "WHERE position = ST_SetSRID(ST_Makepoint(:lat, :lon),4326) ;",
+            nativeQuery = true)
+    Optional<Cashier> findATMByPosition(
             @Param(value="lat")double lattiude,
             @Param(value="lon")double longitude
     );
