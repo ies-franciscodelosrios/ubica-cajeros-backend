@@ -54,8 +54,8 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Transactional
     @Modifying
     @Query(
-            value = "INSERT INTO cashier (address, available, balance, cp, locality, photo, position)" +
-                    "VALUES (:address, :available, :balance, :cp, :locality, encode(pg_read_binary_file(:photo),'base64'), " +
+            value = "INSERT INTO cashier (address, available, balance, cp, locality, photo, position) " +
+                    "VALUES (:address, :available, :balance, :cp, :locality, :photo, " +
                                 "ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326));",
             nativeQuery = true)
     void saveWithPhoto(
@@ -73,7 +73,7 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Modifying
     @Query(
             value = "INSERT INTO cashier (address, available, balance, cp, locality, position)" +
-                    "VALUES (:address, :available, :balance, :cp, :locality, ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326));",
+                    "VALUES (:address, :available, :balance, :cp, :locality, ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326)));",
             nativeQuery = true)
     void saveWithoutPhoto(
             @Param(value = "address")String address,
@@ -114,8 +114,7 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Modifying
     @Query(
             value = "UPDATE cashier " +
-                    "SET address = :address, available = :available, balance = :balance, cp = :cp, locality = :locality, " +
-                        "photo = encode(pg_read_binary_file(:photo),'base64') " +
+                    "SET address = :address, available = :available, balance = :balance, cp = :cp, locality = :locality, photo = :photo " +
                     "WHERE id = :id ;",
             nativeQuery = true)
     int updateWithPhoto(
