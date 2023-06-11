@@ -32,7 +32,11 @@ public class Main extends SpringBootServletInitializer {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("*").allowedHeaders("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:4200",
+                                        "http://localhost:50111")
+                        .allowedMethods("*")
+                        .allowedHeaders("*");
             }
         };
     }
