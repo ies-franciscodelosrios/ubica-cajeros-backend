@@ -50,12 +50,16 @@ public class Cashier implements Serializable {
     @Column(name="available")
     private Boolean available;
 
+    @ManyToOne
+    @JoinColumn(name = "default_atm_id")
+    private Cashier defaultAtm;
+
     @JsonManagedReference
-    @OneToMany(mappedBy = "cashier")
+    @OneToMany(mappedBy = "cashier", cascade = CascadeType.DETACH, orphanRemoval = false)
     private List<Transaction> transactions;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "cashier")
+    @OneToMany(mappedBy = "cashier", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Incidence> incidences;
 
     public Cashier(Long id, String photo, String address, String locality, String cp, Point position, Double lattitude, Double longitude,
