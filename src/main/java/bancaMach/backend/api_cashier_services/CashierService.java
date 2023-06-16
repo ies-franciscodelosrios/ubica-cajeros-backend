@@ -4,6 +4,7 @@ import bancaMach.backend.api_cahier_repositories.CashierRepository;
 import bancaMach.backend.api_cashier_dto.atm.ATMSaveDTO;
 import bancaMach.backend.api_cashier_exceptions.RecordNotFoundException;
 import bancaMach.backend.api_cashier_models.dataobject.Cashier;
+import bancaMach.backend.api_cashier_models.dataobject.Transaction;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -52,8 +53,21 @@ public class CashierService {
     }
 
     public void deleteCashierById(Long id) {
+        final Long defaultId = 47l;
         Optional<Cashier> cashier = cashierRepository.findById(id);
-        if (cashier.isPresent()) {
+        Optional<Cashier> defaultCashier = cashierRepository.findById(defaultId);
+        if (cashier.isPresent() && defaultCashier.isPresent()) {
+
+            for (Transaction transaccion : cashier.get().getTransactions()) {
+                transaccion.setCashier(defaultCashier.get());
+            }
+
+            defaultCashier.get().getTransactions().addAll(cashier.get().getTransactions());
+            cashier.get().getTransactions().clear();
+
+            cashierRepository.save(defaultCashier.get());
+            //cashierRepository.delete(cashier.get());
+
             cashierRepository.deleteById(id);
         } else {
             throw new RecordNotFoundException("No cashier record exist for given id", id);

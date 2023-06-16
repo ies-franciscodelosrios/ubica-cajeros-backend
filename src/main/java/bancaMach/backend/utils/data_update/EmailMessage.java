@@ -9,8 +9,8 @@ import java.util.Properties;
 
 public class EmailMessage {
     public boolean sendPasswordFromMail(RequestPasswordDTO requestPasswordDTO, String password) {
-        String senderEmail = "juanma4x21@gmail.com";
-        String senderPassword = "wegkgoblamtnxtti";
+        String senderEmail = "";
+        String senderPassword = "";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
