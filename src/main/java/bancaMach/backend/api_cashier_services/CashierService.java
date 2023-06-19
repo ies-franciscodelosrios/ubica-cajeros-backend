@@ -95,8 +95,8 @@ public class CashierService {
             if (atm.getId() != null) {
                 if (cashierRepository.findATMByIDAndPosition(atm.getId(), atm.getLattitude(), atm.getLongitude()).isPresent()) {
                     if (atm.getPhoto() == null || atm.getPhoto().equals("")) {
-                        cashierRepository.updateWithoutPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                                atm.getLocality());
+                        cashierRepository.updateWithPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality(), null);
                     } else {
                         cashierRepository.updateWithPhoto(atm.getId(), atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
                                 atm.getLocality(), atm.getPhoto());
@@ -108,8 +108,8 @@ public class CashierService {
             } else { //Insert
                 if (!cashierRepository.findATMByPosition(atm.getLattitude(), atm.getLongitude()).isPresent()) {
                     if (atm.getPhoto() == null || atm.getPhoto().equals("")) {
-                        cashierRepository.saveWithoutPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
-                                atm.getLocality(), atm.getLattitude(), atm.getLongitude());
+                        cashierRepository.saveWithPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
+                                atm.getLocality(), null, atm.getLattitude(), atm.getLongitude());
                     } else {
                         cashierRepository.saveWithPhoto(atm.getAddress(), atm.getAvailable(), atm.getBalance(), atm.getCp(),
                                 atm.getLocality(), atm.getPhoto(), atm.getLattitude(), atm.getLongitude());

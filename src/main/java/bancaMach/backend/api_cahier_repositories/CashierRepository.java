@@ -69,22 +69,6 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
                         @Param(value = "longitude")double longitude
     );
 
-    @Transactional
-    @Modifying
-    @Query(
-            value = "INSERT INTO cashier (address, available, balance, cp, locality, position)" +
-                    "VALUES (:address, :available, :balance, :cp, :locality, ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326));",
-            nativeQuery = true)
-    void saveWithoutPhoto(
-            @Param(value = "address")String address,
-            @Param(value = "available")boolean available,
-            @Param(value = "balance")double balance,
-            @Param(value = "cp")String cp,
-            @Param(value = "locality")String locality,
-            @Param(value = "latitude")double latitude,
-            @Param(value = "longitude")double longitude
-    );
-
     @Query(
             value = "SELECT * " +
                     "FROM cashier " +
@@ -125,22 +109,6 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
             @Param(value = "cp")String cp,
             @Param(value = "locality")String locality,
             @Param(value = "photo")String photo
-    );
-
-    @Transactional
-    @Modifying
-    @Query(
-            value = "UPDATE cashier " +
-                    "SET address = :address, available = :available, balance = :balance, cp = :cp, locality = :locality " +
-                    "WHERE id = :id ;",
-            nativeQuery = true)
-    int updateWithoutPhoto(
-            @Param(value = "id")Long id,
-            @Param(value = "address")String address,
-            @Param(value = "available")boolean available,
-            @Param(value = "balance")double balance,
-            @Param(value = "cp")String cp,
-            @Param(value = "locality")String locality
     );
 
     //Sentencia Insert alternativa
