@@ -73,7 +73,7 @@ public interface CashierRepository extends JpaRepository<Cashier, Long> {
     @Modifying
     @Query(
             value = "INSERT INTO cashier (address, available, balance, cp, locality, position)" +
-                    "VALUES (:address, :available, :balance, :cp, :locality, ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326)));",
+                    "VALUES (:address, :available, :balance, :cp, :locality, ST_SetSRID(ST_Makepoint(:latitude, :longitude),4326));",
             nativeQuery = true)
     void saveWithoutPhoto(
             @Param(value = "address")String address,

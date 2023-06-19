@@ -57,18 +57,13 @@ public class CashierService {
         Optional<Cashier> cashier = cashierRepository.findById(id);
         Optional<Cashier> defaultCashier = cashierRepository.findById(defaultId);
         if (cashier.isPresent() && defaultCashier.isPresent()) {
-
             for (Transaction transaccion : cashier.get().getTransactions()) {
                 transaccion.setCashier(defaultCashier.get());
             }
-
             defaultCashier.get().getTransactions().addAll(cashier.get().getTransactions());
             cashier.get().getTransactions().clear();
-
             cashierRepository.save(defaultCashier.get());
-            //cashierRepository.delete(cashier.get());
-
-            cashierRepository.deleteById(id);
+            cashierRepository.deleteById(id); //cashierRepository.delete(cashier.get());
         } else {
             throw new RecordNotFoundException("No cashier record exist for given id", id);
         }
